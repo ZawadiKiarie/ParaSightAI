@@ -28,7 +28,7 @@ export const Nucleus = ({ position = [0, 1.05, 0.1] }) => {
       {/* Central karyosome */}
       <mesh position={[0, 0, 0]}>
         <sphereGeometry args={[0.045, 24, 24]} />
-        <meshStandardMaterial color="#1a2316" roughness={1} metalness={0} />
+        <meshStandardMaterial color="#152b0b" roughness={1} metalness={1} />
       </mesh>
     </group>
   );
