@@ -11,7 +11,6 @@ import { Model } from "./Enthyst";
 import * as THREE from "three";
 import { useEffect, useRef } from "react";
 import { Model2 } from "./Enthyst2";
-import { Model3 } from "./Enthystv2";
 
 export const Experience = () => {
   const cameraRef = useRef();

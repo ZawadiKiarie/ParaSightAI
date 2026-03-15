@@ -79,13 +79,13 @@ export const CytoplasmParticles = ({ position = [0, 1.0, 0.05] }) => {
 
   // soft misty density layer
   const hazePositions = useMemo(
-    () => generateEllipsoidPositions(320, [0.55, 0.7, 1.15]),
+    () => generateEllipsoidPositions(360, [0.85, 0.7, 0.55]),
     [],
   );
 
   // finer granular layer
   const granulePositions = useMemo(
-    () => generateEllipsoidPositions(160, [0.55, 0.58, 1.05]),
+    () => generateEllipsoidPositions(320, [0.75, 0.58, 0.55]),
     [],
   );
 
@@ -96,7 +96,7 @@ export const CytoplasmParticles = ({ position = [0, 1.0, 0.05] }) => {
         texture={particleTexture}
         positions={hazePositions}
         size={0.14}
-        opacity={0.05}
+        opacity={0.15}
         color="#d7dfcf"
         rotationSpeedY={0.03}
         rotationSpeedX={0.018}
@@ -106,8 +106,8 @@ export const CytoplasmParticles = ({ position = [0, 1.0, 0.05] }) => {
       <ParticleLayer
         texture={particleTexture}
         positions={granulePositions}
-        size={0.045}
-        opacity={0.11}
+        size={0.145}
+        opacity={0.31}
         color="#cfd8c8"
         rotationSpeedY={0.06}
         rotationSpeedX={0.03}

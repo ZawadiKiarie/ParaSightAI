@@ -4,7 +4,7 @@ Command: npx gltfjsx@6.5.3 public/models/enthyst2-v1.glb -o src/components/Enthy
 */
 
 import React, { useEffect } from "react";
-import { useGLTF, useAnimations } from "@react-three/drei";
+import { useGLTF, useAnimations, useTexture } from "@react-three/drei";
 import { useControls } from "leva";
 import { BodyMaterial } from "./BodyMaterial";
 import { Nucleus } from "./Nucleus";
@@ -12,11 +12,24 @@ import { CytoplasmParticles } from "./CytoplasmParticles";
 import { FoodVacuoles } from "./FoodVacuoles";
 import * as THREE from "three";
 import { AnimatedBodyMaterial } from "./AnimatedBodyMaterial";
+import { LavaCytoplasmMaterial } from "./CytoplasmVolumeMaterial";
+import { GlassyCytoplasmMaterial } from "./glassyCytoplasmMaterial";
+import { WarpedCytoplasmMaterial } from "./WarpedCytoplasmMaterial";
+import { IQWarpedMaterial } from "./IQWarpedMaterial";
 
 export function Model2(props) {
   const group = React.useRef();
   const { nodes, _materials, animations } = useGLTF("/models/enthyst2-v1.glb");
   const { actions } = useAnimations(animations, group);
+
+  const cloudTexture = useTexture("/textures/lava/cloud.png");
+  const lavaTexture = useTexture("/textures/lava/lavatile.jpg");
+
+  useEffect(() => {
+    cloudTexture.wrapS = cloudTexture.wrapT = THREE.RepeatWrapping;
+    lavaTexture.wrapS = lavaTexture.wrapT = THREE.RepeatWrapping;
+    lavaTexture.colorSpace = THREE.SRGBColorSpace;
+  }, [cloudTexture, lavaTexture]);
 
   useEffect(() => {
     const action = actions?.["Cube.004Action"];
@@ -36,9 +49,9 @@ export function Model2(props) {
       z: 0.05,
     },
     particlesPosition: {
-      x: -0.03,
+      x: 0.03,
       y: 0.9,
-      z: -0.16,
+      z: 0.09,
     },
   });
 
@@ -63,7 +76,18 @@ export function Model2(props) {
             transmission={0}
             depthWrite={false}
           /> */}
-          <AnimatedBodyMaterial />
+          {/* <AnimatedBodyMaterial /> */}
+          {/* <CytoplasmVolumeMaterial
+            texture1={cloudTexture}
+            texture2={lavaTexture}
+            uvScale={new THREE.Vector2(3.0, 1.0)}
+            alphaMin={0.5}
+            alphaMax={0.95}
+          /> */}
+          {/* <LavaCytoplasmMaterial /> */}
+          {/* <GlassyCytoplasmMaterial /> */}
+          <WarpedCytoplasmMaterial />
+          {/* <IQWarpedMaterial /> */}
         </mesh>
 
         <Nucleus
