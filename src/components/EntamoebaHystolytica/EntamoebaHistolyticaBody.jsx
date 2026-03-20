@@ -7,6 +7,7 @@ import { EntHistNucleus } from "./EntHistNucleus";
 import { FoodVacuole } from "./EmptyVacuole";
 import { VacuolesWRBC } from "./EntHistVacuoleWRBC";
 import { CytoplasmParticles } from "../CytoplasmParticles";
+import { VolumetricParasiteMaterial } from "../EntamoebaHartmanni/FireShader";
 
 export function EntHistTrophModel(props) {
   const group = React.useRef();
@@ -30,7 +31,6 @@ export function EntHistTrophModel(props) {
       const action = actions?.[name];
       if (action) {
         action.reset().fadeIn(0.5).play();
-        console.log(`Animation started: ${name}`);
       } else {
         console.warn(`Animation not found: ${name}`);
       }
@@ -61,7 +61,8 @@ export function EntHistTrophModel(props) {
           scale={[1, 0.708, 1]}
         >
           {/* <LavaCytoplasmMaterial /> */}
-          <IQWarpedMaterial />
+          {/* <IQWarpedMaterial /> */}
+          <VolumetricParasiteMaterial />
         </mesh>
 
         {/* OUTER MEMBRANE */}
