@@ -79,13 +79,13 @@ export const CytoplasmParticles = ({ position = [0, 1.0, 0.05] }) => {
 
   // soft misty density layer
   const hazePositions = useMemo(
-    () => generateEllipsoidPositions(360, [0.85, 0.7, 0.55]),
+    () => generateEllipsoidPositions(360, [1.05, 0.6, 0.55]),
     [],
   );
 
   // finer granular layer
   const granulePositions = useMemo(
-    () => generateEllipsoidPositions(320, [0.75, 0.58, 0.55]),
+    () => generateEllipsoidPositions(220, [1.05, 0.58, 0.55]),
     [],
   );
 

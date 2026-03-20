@@ -10,10 +10,23 @@ const WarpedMaterialImpl = shaderMaterial(
   },
   // Vertex Shader
   /* glsl */ `
+    #include <common>
+    #include <morphtarget_pars_vertex>
     varying vec2 vUv;
+    varying vec3 vNormal;
+
     void main() {
       vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+      #include <begin_vertex>
+      #include <morphtarget_vertex>
+      #include <beginnormal_vertex>
+      #include <defaultnormal_vertex>
+
+      vNormal = normalize(normalMatrix * normal);
+      
+      // Use the 'transformed' variable which has morphing applied
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
     }
   `,
   // Fragment Shader
@@ -21,12 +34,13 @@ const WarpedMaterialImpl = shaderMaterial(
     uniform float iTime;
     uniform float uOpacity;
     varying vec2 vUv;
+    varying vec3 vNormal; // Added for Fresnel effect
 
-    // Biological Green Colormap
+    // Pale Blue Biological Colormap
     vec3 colormap(float x) {
-      vec3 colorA = vec3(0.05, 0.2, 0.1); // Deep green
-      vec3 colorB = vec3(0.4, 0.7, 0.3); // Bright lime
-      vec3 colorC = vec3(0.9, 1.0, 0.8); // Pale cytoplasm
+      vec3 colorA = vec3(0.1, 0.25, 0.4);  // Deep slate blue
+      vec3 colorB = vec3(0.6, 0.85, 1.0);  // Bright sky blue
+      vec3 colorC = vec3(0.9, 0.95, 1.0);  // Very pale, almost white blue
       
       if(x < 0.5) return mix(colorA, colorB, x * 2.0);
       return mix(colorB, colorC, (x - 0.5) * 2.0);
@@ -66,16 +80,21 @@ const WarpedMaterialImpl = shaderMaterial(
     }
 
     void main() {
-      // Zoom out the pattern slightly for better detail on the model
       vec2 uv = vUv * 3.0; 
       float shade = pattern(uv);
       
+      // Get our pale blue color based on noise
       vec3 finalColor = colormap(shade);
       
-      // Add a subtle brightness pulse
-      finalColor += shade * 0.15; 
+      // FRESNEL CALCULATION: Makes edges of the 3D model "pop"
+      // Assuming a simple camera view vector
+      float fresnel = pow(1.0 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.0);
+      
+      // Boost the brightness slightly based on the noise pattern
+      finalColor += shade * 0.1; 
 
-      gl_FragColor = vec4(finalColor, uOpacity);
+      // Apply Fresnel to color (edge glow) and opacity
+      gl_FragColor = vec4(finalColor + (fresnel * 0.5), uOpacity + (fresnel * 0.4));
     }
   `,
 );
@@ -87,7 +106,7 @@ export function WarpedCytoplasmMaterial() {
 
   useFrame((state) => {
     if (ref.current) {
-      ref.current.iTime = state.clock.elapsedTime;
+      ref.current.iTime = state.clock.elapsedTime * 0.5;
     }
   });
 
@@ -96,7 +115,11 @@ export function WarpedCytoplasmMaterial() {
       ref={ref}
       transparent
       depthWrite={false}
-      uOpacity={0.45}
+      uOpacity={0.25}
+      // morphTargets={true}
+      onBeforeCompile={() => {
+        ref.current.morphTargets = true;
+      }}
     />
   );
 }

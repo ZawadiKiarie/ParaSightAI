@@ -9,12 +9,25 @@ const IQWarpedMaterialImpl = shaderMaterial(
     uOpacity: 0.5,
   },
   /* glsl */ `
+    #include <common>
+    #include <morphtarget_pars_vertex>
     varying vec2 vUv;
     varying vec3 vWorldPosition;
+
     void main() {
       vUv = uv;
-      vWorldPosition = (modelMatrix * vec4(position, 1.0)).xyz;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      
+      // 1. Initialize 'transformed' with the base position
+      #include <begin_vertex>
+      
+      // 2. Apply Morph Targets to 'transformed'
+      #include <morphtarget_vertex>
+      
+      // 3. Use 'transformed' instead of 'position'
+      vec4 worldPosition = modelMatrix * vec4(transformed, 1.0);
+      vWorldPosition = worldPosition.xyz;
+      
+      gl_Position = projectionMatrix * viewMatrix * worldPosition;
     }
   `,
   /* glsl */ `
@@ -59,16 +72,15 @@ const IQWarpedMaterialImpl = shaderMaterial(
       float bl = smoothstep( -0.8, 0.8, f );
       float ti = smoothstep( -1.0, 1.0, fbm(p) );
 
-      // BIOLOGICAL GREEN PALETTE
-      vec3 col1 = vec3(0.05, 0.25, 0.15); // Deep Teal/Green
-      vec3 col2 = vec3(0.60, 0.90, 0.45); // Bright Lime/Cytoplasm
-      vec3 col3 = vec3(0.00, 0.02, 0.05); // Near black for depth
+      // BLUISH-PURPLE PALETTE
+      vec3 col1 = vec3(0.15, 0.1, 0.35);  // Deep Royal Purple (Shadows)
+      vec3 col2 = vec3(0.5, 0.7, 1.0);   // Pale Ice Blue (Highlights/Cytoplasm)
+      vec3 col3 = vec3(0.02, 0.01, 0.05); // Near black-purple for depth
 
       return mix( mix( col1, col2, ti ), col3, bl );
     }
 
     void main() {
-      // Use WorldPosition X and Z to map the fluid currents
       vec2 p = vWorldPosition.xz * 1.5; 
       float e = 0.0045;
 
@@ -82,12 +94,13 @@ const IQWarpedMaterialImpl = shaderMaterial(
       vec3 nor = normalize( vec3(ga-gc, e, gb-gc ) );
 
       vec3 col = colc;
-      // Highlighting the "ridges" of the fluid
-      col += vec3(0.4, 0.9, 0.7) * 4.0 * abs(2.0*gc-ga-gb);
+      
+      // Changed Highlight Color to a bright Violet-Cyan for the "ridges"
+      col += vec3(0.6, 0.5, 1.0) * 4.0 * abs(2.0*gc-ga-gb);
+      
       col *= 1.0 + 0.2 * nor.y * nor.y;
       col += 0.05 * nor.y * nor.y * nor.y;
       
-      // Calculate alpha based on density
       float alpha = clamp(gc * 2.0, 0.2, 1.0) * uOpacity;
       
       gl_FragColor = vec4( col, alpha );
@@ -109,9 +122,14 @@ export function IQWarpedMaterial() {
   return (
     <iQWarpedMaterialImpl
       ref={ref}
+      key={IQWarpedMaterialImpl.key}
       transparent
       depthWrite={false}
       uOpacity={0.6}
+      // morphTargets={true}
+      onBeforeCompile={() => {
+        ref.current.morphTargets = true;
+      }}
     />
   );
 }

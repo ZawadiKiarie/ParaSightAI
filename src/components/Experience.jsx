@@ -11,6 +11,7 @@ import { Model } from "./Enthyst";
 import * as THREE from "three";
 import { useEffect, useRef } from "react";
 import { Model2 } from "./Enthyst2";
+import { EntHistTrophModel } from "./EntamoebaHystolytica/EntamoebaHistolyticaBody";
 
 export const Experience = () => {
   const cameraRef = useRef();
@@ -39,25 +40,22 @@ export const Experience = () => {
         makeDefault
         position={[cameraposition.x, cameraposition.y, cameraposition.z]}
       />
-      {/* <mesh position={[modelposition.x, modelposition.y, modelposition.z]}>
-        <boxGeometry args={[2, 2, 2]} />
-        <meshStandardMaterial color={"red"} />
-      </mesh> */}
-      {/* <ambientLight intensity={1} /> */}
-      {/* <directionalLight position={[0, 0, 5]} /> */}
       <OrbitControls
         enablePan
         minPolarAngle={0}
         maxPolarAngle={THREE.MathUtils.degToRad(73)}
       />
       <Float
-        position={[0, 0.5, 0]}
+        position={[0, 1.0, 0]}
         speed={2}
-        rotationIntensity={2}
+        rotationIntensity={1}
         floatIntensity={2}
       >
-        <Model2 />
+        <EntHistTrophModel scale={2} />
       </Float>
+      {/* <group position={[0, 1.0, 0]}>
+        <EntHistTrophModel scale={2} />
+      </group> */}
       <ContactShadows scale={10} blur={3} opacity={0.25} far={10} />
 
       <Environment preset="city" />
@@ -65,13 +63,7 @@ export const Experience = () => {
       {/* Ground */}
       <mesh position={[0, -1.18, 0]} rotation-x={-Math.PI / 2}>
         <planeGeometry args={[100, 100]} />
-        {/* <MeshReflectorMaterial
-          color="#171720"
-          resolution={1024}
-          roughness={0.6}
-          mixStrength={3}
-        /> */}
-        <meshStandardMaterial color="#171720" />
+        <meshStandardMaterial color="#ffffff" />
       </mesh>
     </>
   );
