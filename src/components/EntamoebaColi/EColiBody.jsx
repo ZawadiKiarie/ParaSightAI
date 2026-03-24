@@ -20,6 +20,7 @@ export function EColiModel(props) {
       const action = actions?.[name];
       if (action) {
         action.reset().fadeIn(0.5).play();
+        console.log(`Animation found: ${name}`);
       } else {
         console.warn(`Animation not found: ${name}`);
       }
@@ -33,34 +34,16 @@ export function EColiModel(props) {
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
         <mesh
-          name="innermembrane"
+          name="outermembrane"
           geometry={nodes.Mball002.geometry}
           // material={nodes.Mball002.material}
           morphTargetDictionary={nodes.Mball002.morphTargetDictionary}
           morphTargetInfluences={nodes.Mball002.morphTargetInfluences}
           position={[0, 1, 0]}
         >
-          <DirtyCytoplasmMaterial
-            color="#9a8862"
-            opacity={0.88}
-            scale={3.4}
-            contrast={1.25}
-            brightness={1.0}
-            wobble={0.012}
-            rimStrength={0.35}
-            darkness={0.45}
-          />
-        </mesh>
-        {/* <mesh
-          name="outermembrane"
-          geometry={nodes.Mball001.geometry}
-          material={nodes.Mball001.material}
-          morphTargetDictionary={nodes.Mball001.morphTargetDictionary}
-          morphTargetInfluences={nodes.Mball001.morphTargetInfluences}
-          position={[0, 1, 0]}
-        >
           <meshPhysicalMaterial
-            color={"#cceed3"}
+            morphTargets={true}
+            color={"#c2cf75"}
             transparent={true}
             opacity={0.8}
             transmission={0.1}
@@ -70,7 +53,25 @@ export function EColiModel(props) {
             ior={1.33}
             depthWrite={false}
           />
-        </mesh> */}
+        </mesh>
+        <mesh
+          name="innermembrane"
+          geometry={nodes.Mball001.geometry}
+          // material={nodes.Mball001.material}
+          morphTargetDictionary={nodes.Mball001.morphTargetDictionary}
+          morphTargetInfluences={nodes.Mball001.morphTargetInfluences}
+          position={[0, 1, 0]}
+        >
+          <DirtyCytoplasmMaterial
+            opacity={0.88}
+            noiseScale={13.0}
+            flowSpeed={0.96}
+            brightness={0.2}
+            color="#c2cf75"
+            fresnelStrength={0.06}
+            morphTargets={true}
+          />
+        </mesh>
       </group>
     </group>
   );

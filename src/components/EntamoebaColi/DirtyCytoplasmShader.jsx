@@ -1,73 +1,68 @@
-import * as THREE from "three";
-import React, { forwardRef, useMemo, useRef } from "react";
-import { extend, useFrame } from "@react-three/fiber";
 import { shaderMaterial } from "@react-three/drei";
+import { extend, useFrame } from "@react-three/fiber";
+import { useRef } from "react";
+import * as THREE from "three";
 
-const DirtyCytoplasmMaterialImpl = shaderMaterial(
+const ParasiteCytoplasmMaterialImpl = shaderMaterial(
   {
     iTime: 0,
-    uColor: new THREE.Color("#9a8862"),
-    uOpacity: 0.88,
-    uScale: 3.4,
-    uContrast: 1.25,
-    uBrightness: 1.0,
-    uWobble: 0.012,
-    uRimStrength: 0.35,
-    uDarkness: 0.45,
+    uOpacity: 0.9,
+    uNoiseScale: 3.2,
+    uFlowSpeed: 0.18,
+    uBrightness: 0.22,
+    uColor: new THREE.Color("#7fae72"),
+    uFresnelStrength: 0.08,
   },
-
-  // vertex shader
   /* glsl */ `
+    #include <common>
+    #include <morphtarget_pars_vertex>
+
     varying vec3 vLocalPosition;
     varying vec3 vWorldPosition;
     varying vec3 vNormalW;
-
-    uniform float iTime;
-    uniform float uWobble;
 
     void main() {
-      vec3 pos = position;
-      vec3 n = normal;
+      // 1. Start with the base position
+      vec3 transformed = vec3(position);
 
-      // subtle organic wobble
-      pos += n * (
-        sin(pos.x * 5.0 + iTime * 1.2) *
-        sin(pos.y * 4.0 + iTime * 0.9) *
-        sin(pos.z * 6.0 + iTime * 1.1)
-      ) * uWobble;
+      // 2. APPLY MORPH TARGETS MANUALLY
+      // This is the "secret sauce" for custom shaders with GLTF animations
+      #ifdef USE_MORPHTARGETS
+        #include <morphtarget_vertex>
+      #endif
 
-      vLocalPosition = pos;
-      vNormalW = normalize(mat3(modelMatrix) * n);
+      vLocalPosition = transformed;
+      
+      // 3. Standard transformations
+      vec4 worldPosition = modelMatrix * vec4(transformed, 1.0);
+      vWorldPosition = worldPosition.xyz;
+      vNormalW = normalize(mat3(modelMatrix) * normal);
 
-      vec4 worldPos = modelMatrix * vec4(pos, 1.0);
-      vWorldPosition = worldPos.xyz;
-
-      gl_Position = projectionMatrix * viewMatrix * worldPos;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(transformed, 1.0);
     }
   `,
-
-  // fragment shader
   /* glsl */ `
+    uniform float iTime;
+    uniform float uOpacity;
+    uniform float uNoiseScale;
+    uniform float uFlowSpeed;
+    uniform float uBrightness;
+    uniform vec3 uColor;
+    uniform float uFresnelStrength;
+
     varying vec3 vLocalPosition;
     varying vec3 vWorldPosition;
     varying vec3 vNormalW;
 
-    uniform float iTime;
-    uniform vec3 uColor;
-    uniform float uOpacity;
-    uniform float uScale;
-    uniform float uContrast;
-    uniform float uBrightness;
-    uniform float uRimStrength;
-    uniform float uDarkness;
-
     float hash(vec3 p) {
-      return fract(sin(dot(p, vec3(127.1, 311.7, 74.7))) * 43758.5453123);
+      p = fract(p * 0.3183099 + 0.1);
+      p *= 17.0;
+      return fract(p.x * p.y * p.z * (p.x + p.y + p.z));
     }
 
-    float noise(vec3 p) {
-      vec3 i = floor(p);
-      vec3 f = fract(p);
+    float noise(vec3 x) {
+      vec3 i = floor(x);
+      vec3 f = fract(x);
       f = f * f * (3.0 - 2.0 * f);
 
       float n000 = hash(i + vec3(0.0, 0.0, 0.0));
@@ -96,7 +91,7 @@ const DirtyCytoplasmMaterialImpl = shaderMaterial(
 
       for (int i = 0; i < 5; i++) {
         value += amp * noise(p);
-        p *= 2.0;
+        p = p * 2.0 + vec3(13.1, 7.7, 5.3);
         amp *= 0.5;
       }
 
@@ -104,100 +99,65 @@ const DirtyCytoplasmMaterialImpl = shaderMaterial(
     }
 
     void main() {
-      vec3 normal = normalize(vNormalW);
+      vec3 p = vLocalPosition * uNoiseScale;
+
+      // isotropic 3D flow in local space -> no directional stretching
+      float t = iTime * uFlowSpeed;
+      vec3 flowA = vec3(t, t * 0.8, -t * 0.6);
+      vec3 flowB = vec3(-t * 0.7, t * 0.5, t);
+
+      float n1 = fbm(p + flowA);
+      float n2 = fbm(p * 1.7 + flowB);
+      float density = mix(n1, n2, 0.45);
+
+      // soft cloudy bands, same hue always
+      density = smoothstep(0.28, 0.82, density);
+
+      vec3 color = uColor * (0.82 + density * uBrightness);
+
+      vec3 normalW = normalize(vNormalW);
       vec3 viewDir = normalize(cameraPosition - vWorldPosition);
+      float fresnel = pow(1.0 - max(dot(normalW, viewDir), 0.0), 2.0);
 
-      vec3 p = vLocalPosition * uScale;
+      color += fresnel * uFresnelStrength;
 
-      float n1 = fbm(p + vec3(0.0, iTime * 0.18, 0.0));
-      float n2 = fbm(p * 2.2 - vec3(iTime * 0.12, 0.0, iTime * 0.08));
-      float n3 = noise(p * 4.5 + vec3(2.0, iTime * 0.2, 7.0));
-
-      float pattern = mix(n1, n2, 0.55);
-      pattern = mix(pattern, n3, 0.2);
-      pattern = pow(pattern, uContrast);
-      pattern *= uBrightness;
-
-      float darkPockets = smoothstep(0.45, 0.85, n2);
-
-      float fresnel = pow(1.0 - max(dot(viewDir, normal), 0.0), 2.0);
-
-      vec3 base = uColor;
-      vec3 darker = base * (1.0 - uDarkness);
-      vec3 lighter = base * 1.12;
-
-      vec3 color = mix(darker, lighter, pattern);
-      color = mix(color, darker * 0.82, darkPockets * 0.45);
-      color += fresnel * uRimStrength * 0.22;
-
-      float alpha = uOpacity * mix(0.72, 1.0, pattern);
-
-      gl_FragColor = vec4(color, alpha);
+      gl_FragColor = vec4(color, uOpacity);
     }
   `,
 );
 
-extend({ DirtyCytoplasmMaterialImpl });
+extend({ ParasiteCytoplasmMaterialImpl });
 
-export const DirtyCytoplasmMaterial = forwardRef(
-  function DirtyCytoplasmMaterial(
-    {
-      color = "#9a8862",
-      opacity = 0.88,
-      scale = 3.4,
-      contrast = 1.25,
-      brightness = 1.0,
-      wobble = 0.012,
-      rimStrength = 0.35,
-      darkness = 0.45,
-      side = THREE.DoubleSide,
-      transparent = true,
-      depthWrite = false,
-      ...props
-    },
-    ref,
-  ) {
-    const localRef = useRef();
-    const materialRef = ref || localRef;
+export function DirtyCytoplasmMaterial({
+  opacity = 0.9,
+  noiseScale = 3.2,
+  flowSpeed = 0.18,
+  brightness = 0.22,
+  color = "#7fae72",
+  fresnelStrength = 0.08,
+}) {
+  const ref = useRef();
 
-    useFrame((_, delta) => {
-      if (materialRef.current) {
-        materialRef.current.iTime += delta;
-      }
-    });
+  useFrame((state) => {
+    if (ref.current) {
+      ref.current.iTime = state.clock.elapsedTime;
+    }
+  });
 
-    const uniforms = useMemo(
-      () => ({
-        uColor: new THREE.Color(color),
-        uOpacity: opacity,
-        uScale: scale,
-        uContrast: contrast,
-        uBrightness: brightness,
-        uWobble: wobble,
-        uRimStrength: rimStrength,
-        uDarkness: darkness,
-      }),
-      [
-        color,
-        opacity,
-        scale,
-        contrast,
-        brightness,
-        wobble,
-        rimStrength,
-        darkness,
-      ],
-    );
-
-    return (
-      <dirtyCytoplasmMaterialImpl
-        ref={materialRef}
-        transparent={transparent}
-        depthWrite={depthWrite}
-        side={side}
-        {...uniforms}
-        {...props}
-      />
-    );
-  },
-);
+  return (
+    <parasiteCytoplasmMaterialImpl
+      ref={ref}
+      key={ParasiteCytoplasmMaterialImpl.key}
+      transparent
+      depthWrite={false}
+      depthTest={true}
+      side={THREE.FrontSide}
+      uOpacity={opacity}
+      uNoiseScale={noiseScale}
+      uFlowSpeed={flowSpeed}
+      uBrightness={brightness}
+      uColor={new THREE.Color(color)}
+      uFresnelStrength={fresnelStrength}
+    />
+  );
+}

@@ -17,18 +17,18 @@ import { EColiModel } from "./EntamoebaColi/EColiBody";
 
 export const Experience = () => {
   const cameraRef = useRef();
-  const { _modelposition, cameraposition } = useControls({
-    modelposition: {
-      x: 0.1,
-      y: 0.1,
-      z: 0.1,
-    },
-    cameraposition: {
-      x: -4.8,
-      y: 2.5,
-      z: 6.7,
-    },
-  });
+  // const { _modelposition, cameraposition } = useControls({
+  //   modelposition: {
+  //     x: 0.1,
+  //     y: 0.1,
+  //     z: 0.1,
+  //   },
+  //   cameraposition: {
+  //     x: -4.8,
+  //     y: 2.5,
+  //     z: 6.7,
+  //   },
+  // });
 
   useEffect(() => {
     if (cameraRef.current) {
@@ -40,7 +40,7 @@ export const Experience = () => {
       <PerspectiveCamera
         ref={cameraRef}
         makeDefault
-        position={[cameraposition.x, cameraposition.y, cameraposition.z]}
+        position={[-4.8, 2.6, 6.7]}
       />
       <OrbitControls
         enablePan
