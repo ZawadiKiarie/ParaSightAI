@@ -74,34 +74,34 @@ export function HartmanniModel(props) {
 
         {/* EMPTY FOOD VACUOLES */}
         <group name="Vacuoles">
-          <FoodVacuole position={[1.5, 1.2, 0.3]} scale={0.15} />
+          <FoodVacuole position={[0.5, 1.2, 0.3]} scale={0.15} />
           <FoodVacuole
-            position={[-0.4, -0.1, 0.2]}
+            position={[-0.4, 0.3, 0.2]}
             scale={0.12}
             rotation={[1, 0, 0.5]}
           />
-          <FoodVacuole position={[0.1, -0.2, 0.2]} scale={0.18} />
-          <FoodVacuole position={[-0.7, -0.1, 0.7]} scale={0.11} />
-          <FoodVacuole position={[-0.5, 0.2, 1.0]} scale={0.05} />
+          <FoodVacuole position={[0.1, 0.2, 0.2]} scale={0.18} />
+          <FoodVacuole position={[0.7, 1.5, 0.7]} scale={0.11} />
+          <FoodVacuole position={[0.5, 1.2, 1.0]} scale={0.05} />
           <FoodVacuole
-            position={[0.4, -0.1, -0.2]}
+            position={[0.4, 0.6, -0.2]}
             scale={0.02}
             rotation={[1, 0, 0.5]}
           />
           <FoodVacuole position={[0.1, 0.2, -0.2]} scale={0.04} />
-          <FoodVacuole position={[0.1, 0.1, 0.7]} scale={0.08} />
+          <FoodVacuole position={[0.1, 0.4, 0.7]} scale={0.08} />
           <FoodVacuole
             position={[0.24, -0.1, 0.02]}
             scale={0.03}
             rotation={[1, 0, 0.5]}
           />
           <FoodVacuole
-            position={[0.24, -0.1, -0.22]}
+            position={[0.24, 0.7, -0.22]}
             scale={0.04}
             rotation={[1, 0, 0.5]}
           />
           <FoodVacuole
-            position={[0.24, -0.1, -0.22]}
+            position={[0.24, 0.1, -0.22]}
             scale={0.03}
             rotation={[1, 0, 0.5]}
           />

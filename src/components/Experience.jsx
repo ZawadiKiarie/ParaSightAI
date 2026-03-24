@@ -13,6 +13,7 @@ import { useEffect, useRef } from "react";
 import { Model2 } from "./Enthyst2";
 import { EntHistTrophModel } from "./EntamoebaHystolytica/EntamoebaHistolyticaBody";
 import { HartmanniModel } from "./EntamoebaHartmanni/HartmanniBody";
+import { EColiModel } from "./EntamoebaColi/EColiBody";
 
 export const Experience = () => {
   const cameraRef = useRef();
@@ -48,12 +49,13 @@ export const Experience = () => {
       />
       <Float
         position={[0, 1.0, 0]}
-        speed={2}
+        speed={1}
         rotationIntensity={1}
-        floatIntensity={2}
+        floatIntensity={1}
       >
         {/* <EntHistTrophModel /> */}
-        <HartmanniModel position={[0, -1, 0]} />
+        {/* <HartmanniModel position={[0, -1, 0]} /> */}
+        <EColiModel position={[0, -1, 0]} />
       </Float>
       {/* <group position={[0, 1.0, 0]}>
         <EntHistTrophModel scale={2} />
