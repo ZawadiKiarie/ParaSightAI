@@ -15,6 +15,7 @@ import { EntHistTrophModel } from "./EntamoebaHystolytica/EntamoebaHistolyticaBo
 import { HartmanniModel } from "./EntamoebaHartmanni/HartmanniBody";
 import { EColiModel } from "./EntamoebaColi/EColiBody";
 import { EColiModel2 } from "./EntamoebaColi/EColiBody2";
+import { GLTrophozoite } from "./GiardiaLamblia/GLTrophozoite";
 
 export const Experience = () => {
   const cameraRef = useRef();
@@ -51,12 +52,13 @@ export const Experience = () => {
       <Float
         position={[0, 1.0, 0]}
         speed={1}
-        rotationIntensity={1}
+        rotationIntensity={0}
         floatIntensity={1}
       >
         {/* <EntHistTrophModel /> */}
         {/* <HartmanniModel scale={0.5} position={[0, -1, 0]} /> */}
-        <EColiModel2 position={[0, -1, 0]} />
+        {/* <EColiModel2 position={[0, -1, 0]} /> */}
+        <GLTrophozoite rotation={[0, Math.PI / 2, 0]} position={[2, -1, 0]} />
       </Float>
       {/* <group position={[0, 1.0, 0]}>
         <EntHistTrophModel scale={2} />
