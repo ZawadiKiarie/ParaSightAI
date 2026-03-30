@@ -16,6 +16,10 @@ import { HartmanniModel } from "./EntamoebaHartmanni/HartmanniBody";
 import { EColiModel } from "./EntamoebaColi/EColiBody";
 import { EColiModel2 } from "./EntamoebaColi/EColiBody2";
 import { GLTrophozoite } from "./GiardiaLamblia/GLTrophozoite";
+import { BCVacuole } from "./BlastoCystis/BCVacuole";
+import { CryptoSporidiumOocyst } from "./CryptoSporidium/CryptoSprodiumOocyst";
+import { CBOocyst } from "./CystoisosporaBelli/CystoisosporaBelliOocyst";
+import { DFTrophozoite } from "./DientamoebaFragilis/DFTrophozoite";
 
 export const Experience = () => {
   const cameraRef = useRef();
@@ -58,7 +62,14 @@ export const Experience = () => {
         {/* <EntHistTrophModel /> */}
         {/* <HartmanniModel scale={0.5} position={[0, -1, 0]} /> */}
         {/* <EColiModel2 position={[0, -1, 0]} /> */}
-        <GLTrophozoite rotation={[0, Math.PI / 2, 0]} position={[2, -1, 0]} />
+        {/* <GLTrophozoite rotation={[0, Math.PI / 2, 0]} position={[2, -1, 0]} /> */}
+        {/* <BCVacuole position={[0, -1, 0]} /> */}
+        {/* <CryptoSporidiumOocyst
+          rotation={[0, -Math.PI, 0]}
+          position={[0, -1, 0]}
+        /> */}
+        {/* <CBOocyst position={[0, -1, 0]} /> */}
+        <DFTrophozoite position={[0, -1, 0]} />
       </Float>
       {/* <group position={[0, 1.0, 0]}>
         <EntHistTrophModel scale={2} />
