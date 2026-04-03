@@ -5,115 +5,180 @@ Command: npx gltfjsx@6.5.3 public/models/EntHistCyst-v1.glb -o src/components/En
 
 import React from "react";
 import { useGLTF } from "@react-three/drei";
+import { EntHistCystCytoplasmMaterial } from "../shader/EntHistCystShader";
+import {
+  NuclearEnvelopeMaterial,
+  ChromatinLayerMaterial,
+  KaryosomeMaterial,
+  ChromatoidBodyMaterial,
+  OuterCystWallMaterial,
+} from "../shader/EntHistCystStructureMaterials";
 
-export function Model(props) {
+export function EntHistCystModel(props) {
   const { nodes, materials } = useGLTF("/models/EntHistCyst-v1.glb");
   return (
     <group {...props} dispose={null}>
       <mesh
         name="outer_cyst_membrane"
         geometry={nodes.outer_cyst_membrane.geometry}
-        material={nodes.outer_cyst_membrane.material}
+        // material={nodes.outer_cyst_membrane.material}
         position={[0, 1, 0]}
-      />
+      >
+        <meshPhysicalMaterial
+          color={"#a2df96"}
+          transparent={true}
+          opacity={0.8}
+          transmission={0.1}
+          thickness={1.0}
+          roughness={0.2}
+          metalness={0}
+          ior={1}
+          depthWrite={false}
+        />
+      </mesh>
       <mesh
         name="inner_cyst_membrane"
         geometry={nodes.inner_cyst_membrane.geometry}
-        material={nodes.inner_cyst_membrane.material}
-      />
+        // material={nodes.inner_cyst_membrane.material}
+      >
+        <EntHistCystCytoplasmMaterial
+          uOpacity={0.68}
+          uDensity={1.55}
+          uBaseColor={"#bcc99a"}
+          uCloudColor={"#cfdcb0"}
+          uShadowColor={"#97a671"}
+          uMotionStrength={0.01}
+          uNoiseScale={3.4}
+          uRimStrength={0.22}
+        />
+      </mesh>
+      {/* Chromatoid bodies */}
       <mesh
         name="chromatoid_body_1"
         geometry={nodes.chromatoid_body_1.geometry}
-        material={nodes.chromatoid_body_1.material}
         position={[-0.405, 1.449, -0.206]}
         rotation={[0, 0, -0.977]}
-      />
+      >
+        <ChromatoidBodyMaterial />
+      </mesh>
+
       <mesh
         name="chromatoid_body_2"
         geometry={nodes.chromatoid_body_2.geometry}
-        material={nodes.chromatoid_body_2.material}
         position={[0.523, 0.681, 0.023]}
         rotation={[0, 0, -0.396]}
-      />
+      >
+        <ChromatoidBodyMaterial />
+      </mesh>
+
       <mesh
         name="chromatoid_body_3"
         geometry={nodes.chromatoid_body_3.geometry}
-        material={nodes.chromatoid_body_3.material}
         position={[-0.476, 0.839, -0.389]}
         rotation={[-1.186, 0.034, -0.581]}
-      />
+      >
+        <ChromatoidBodyMaterial />
+      </mesh>
+
+      {/* Nucleus 1 */}
       <mesh
         name="nuclear_envelope"
         geometry={nodes.nuclear_envelope.geometry}
-        material={nodes.nuclear_envelope.material}
         position={[0, 0.772, 0.4]}
-      />
+      >
+        <NuclearEnvelopeMaterial />
+      </mesh>
+
       <mesh
         name="karyosome"
         geometry={nodes.karyosome.geometry}
-        material={nodes.karyosome.material}
         position={[0, 0.772, 0.4]}
-      />
+      >
+        <KaryosomeMaterial />
+      </mesh>
+
       <mesh
         name="chromatin_layer"
         geometry={nodes.chromatin_layer.geometry}
-        material={nodes.chromatin_layer.material}
         position={[0, 0.772, 0.4]}
-      />
+      >
+        <ChromatinLayerMaterial />
+      </mesh>
+
+      {/* Nucleus 2 */}
       <mesh
         name="nuclear_envelope001"
         geometry={nodes.nuclear_envelope001.geometry}
-        material={nodes.nuclear_envelope001.material}
         position={[0.094, 1.45, 0.27]}
-      />
+      >
+        <NuclearEnvelopeMaterial />
+      </mesh>
+
       <mesh
         name="karyosome001"
         geometry={nodes.karyosome001.geometry}
-        material={nodes.karyosome001.material}
         position={[0.094, 1.45, 0.27]}
-      />
+      >
+        <KaryosomeMaterial />
+      </mesh>
+
       <mesh
         name="chromatin_layer001"
         geometry={nodes.chromatin_layer001.geometry}
-        material={nodes.chromatin_layer001.material}
         position={[0.094, 1.45, 0.27]}
-      />
+      >
+        <ChromatinLayerMaterial />
+      </mesh>
+
+      {/* Nucleus 3 */}
       <mesh
         name="nuclear_envelope002"
         geometry={nodes.nuclear_envelope002.geometry}
-        material={nodes.nuclear_envelope002.material}
         position={[0, 1.066, -0.222]}
-      />
+      >
+        <NuclearEnvelopeMaterial />
+      </mesh>
+
       <mesh
         name="karyosome002"
         geometry={nodes.karyosome002.geometry}
-        material={nodes.karyosome002.material}
         position={[0, 1.066, -0.222]}
-      />
+      >
+        <KaryosomeMaterial />
+      </mesh>
+
       <mesh
         name="chromatin_layer002"
         geometry={nodes.chromatin_layer002.geometry}
-        material={nodes.chromatin_layer002.material}
         position={[0, 1.066, -0.222]}
-      />
+      >
+        <ChromatinLayerMaterial />
+      </mesh>
+
+      {/* Nucleus 4 */}
       <mesh
         name="nuclear_envelope003"
         geometry={nodes.nuclear_envelope003.geometry}
-        material={nodes.nuclear_envelope003.material}
         position={[0.015, 0.575, -0.262]}
-      />
+      >
+        <NuclearEnvelopeMaterial />
+      </mesh>
+
       <mesh
         name="karyosome003"
         geometry={nodes.karyosome003.geometry}
-        material={nodes.karyosome003.material}
         position={[0.015, 0.575, -0.262]}
-      />
+      >
+        <KaryosomeMaterial />
+      </mesh>
+
       <mesh
         name="chromatin_layer003"
         geometry={nodes.chromatin_layer003.geometry}
-        material={nodes.chromatin_layer003.material}
         position={[0.015, 0.575, -0.262]}
-      />
+      >
+        <ChromatinLayerMaterial />
+      </mesh>
     </group>
   );
 }

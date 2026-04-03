@@ -10,16 +10,21 @@ import {
 import { Model } from "./Enthyst";
 import * as THREE from "three";
 import { useEffect, useRef } from "react";
-import { Model2 } from "./Enthyst2";
-import { EntHistTrophModel } from "./EntamoebaHystolytica/EntamoebaHistolyticaBody";
-import { HartmanniModel } from "./EntamoebaHartmanni/HartmanniBody";
-import { EColiModel } from "./EntamoebaColi/EColiBody";
-import { EColiModel2 } from "./EntamoebaColi/EColiBody2";
-import { GLTrophozoite } from "./GiardiaLamblia/GLTrophozoite";
-import { BCVacuole } from "./BlastoCystis/BCVacuole";
-import { CryptoSporidiumOocyst } from "./CryptoSporidium/CryptoSprodiumOocyst";
-import { CBOocyst } from "./CystoisosporaBelli/CystoisosporaBelliOocyst";
-import { DFTrophozoite } from "./DientamoebaFragilis/DFTrophozoite";
+// import { Model2 } from "./Enthyst2";
+// import { EntHistTrophModel } from "./EntamoebaHystolytica/EntamoebaHistolyticaBody";
+// import { HartmanniModel } from "./EntamoebaHartmanni/HartmanniBody";
+// import { EColiModel } from "./EntamoebaColi/EColiBody";
+// import { EColiModel2 } from "./EntamoebaColi/EColiBody2";
+// import { GLTrophozoite } from "./GiardiaLamblia/GLTrophozoite";
+// import { BCVacuole } from "./BlastoCystis/BCVacuole";
+// import { CryptoSporidiumOocyst } from "./CryptoSporidium/CryptoSprodiumOocyst";
+// import { CBOocyst } from "./CystoisosporaBelli/CystoisosporaBelliOocyst";
+// import { DFTrophozoite } from "./DientamoebaFragilis/DFTrophozoite";
+import { EntHistCystModel } from "./EntamoebaHystolytica/Cyst/EntHistCyst";
+import { HartmanniCystModel } from "./EntamoebaHartmanni/cyst/HartmanniCyst";
+import { EColiCystModel } from "./EntamoebaColi/Cyst/EColiCyst";
+import { GLCystModel } from "./GiardiaLamblia/Cyst/GLCyst";
+import { BlastoCystisCyst } from "./BlastoCystis/Cyst/BCCyst";
 
 export const Experience = () => {
   const cameraRef = useRef();
@@ -69,7 +74,12 @@ export const Experience = () => {
           position={[0, -1, 0]}
         /> */}
         {/* <CBOocyst position={[0, -1, 0]} /> */}
-        <DFTrophozoite position={[0, -1, 0]} />
+        {/* <DFTrophozoite position={[0, -1, 0]} /> */}
+        {/* <EntHistCystModel position={[0, -1, 0]} /> */}
+        {/* <HartmanniCystModel position={[0, -1, 0]} /> */}
+        {/* <EColiCystModel position={[0, -1, 0]} /> */}
+        {/* <GLCystModel position={[0, -1, 0]} /> */}
+        <BlastoCystisCyst position={[4, -1, 0]} />
       </Float>
       {/* <group position={[0, 1.0, 0]}>
         <EntHistTrophModel scale={2} />
