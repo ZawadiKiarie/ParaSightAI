@@ -2,18 +2,20 @@ import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
 import { IntroPage } from "./components/IntroPage";
 import OverlayUI from "./components/OverlayUI";
+import { LoadingScreen } from "./components/LoadingScreen";
+import { Suspense, useState } from "react";
 
 function App() {
+  const [start, setStart] = useState(false);
   return (
     <>
+      <LoadingScreen started={start} onStarted={() => setStart(true)} />
       <div className="experience">
-        <OverlayUI />
         <Canvas className="experience-canvas">
-          <color attach="background" args={["#ffffff"]} />
-          <fog attach="fog" args={["#ffffff", 20, 30]} />
-          <IntroPage />
-          {/* <Experience /> */}
+          <Suspense fallback={null}>{start && <IntroPage />}</Suspense>
         </Canvas>
+
+        {start && <OverlayUI />}
       </div>
     </>
   );

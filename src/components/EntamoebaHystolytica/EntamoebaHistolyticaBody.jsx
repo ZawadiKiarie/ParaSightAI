@@ -8,6 +8,7 @@ import { FoodVacuole } from "./EmptyVacuole";
 import { VacuolesWRBC } from "./EntHistVacuoleWRBC";
 import { CytoplasmParticles } from "../CytoplasmParticles";
 import { VolumetricParasiteMaterial } from "../EntamoebaHartmanni/FireShader";
+import { useFrame } from "@react-three/fiber";
 
 export function EntHistTrophModel(props) {
   const group = React.useRef();
@@ -15,6 +16,36 @@ export function EntHistTrophModel(props) {
     "/models/enthystbody-v1.glb",
   );
   const { actions } = useAnimations(animations, group);
+
+  // --- MOUSE TRACKING LOGIC ---
+  // useFrame((state) => {
+  //   if (!group.current) return;
+
+  //   const { pointer } = state;
+
+  //   // Inside useFrame
+  //   const time = state.clock.getElapsedTime();
+  //   group.current.position.y = Math.sin(time * 0.5) * 0.1; // Gentle floating up/down
+
+  //   // 1. Define target rotations based on mouse position (-1 to 1)
+  //   // Vertical mouse (y) rotates the X-axis
+  //   // Horizontal mouse (x) rotates the Y-axis
+  //   const targetX = -pointer.y * 0.5; // Up/Down
+  //   const targetY = pointer.x * 0.5; // Left/Right
+
+  //   // 2. Smoothly interpolate to the target
+  //   // 0.05 is the 'damping' factor. Lower = smoother/laggier.
+  //   group.current.rotation.x = THREE.MathUtils.lerp(
+  //     group.current.rotation.x,
+  //     targetX,
+  //     0.05,
+  //   );
+  //   group.current.rotation.y = THREE.MathUtils.lerp(
+  //     group.current.rotation.y,
+  //     targetY,
+  //     0.05,
+  //   );
+  // });
 
   // Continuous Rotation Logic
   // useFrame((state, delta) => {

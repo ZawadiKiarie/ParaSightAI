@@ -1,3 +1,6 @@
+import { SoundToggle } from "./SoundToggle";
+import { StartButton } from "./StartExperienceButton";
+
 const OverlayUI = () => {
   return (
     <div className="overlay-container">
@@ -44,8 +47,10 @@ const OverlayUI = () => {
 
       {/* BOTTOM SECTION (Placeholders for next steps) */}
       <div className="bottom-section">
-        <div className="sound-placeholder"></div>
-        <div className="button-placeholder"></div>
+        <div className="sound-container">
+          <SoundToggle audioUrl="\audio\bgsound.mp3" />
+        </div>
+        <StartButton />
         <div className="credits-placeholder">JKUAT 2026</div>
       </div>
     </div>
