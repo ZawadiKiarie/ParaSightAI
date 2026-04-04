@@ -19,3 +19,194 @@
   height: 100%;
   z-index: 0;
 }
+
+/* Main Layout */
+.overlay-container {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+  color: white;
+  font-family: "Inter", sans-serif; /* Use a clean sans-serif */
+}
+
+.top-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+/* Left Side Typography */
+.title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.main-title {
+  font-size: 1.5rem;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.sub-title {
+  font-size: 4rem;
+  font-weight: 500;
+  margin: 0;
+
+  /* 1. The Glassy Gradient */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.8) 0%,
+    /* Bright top */ rgba(255, 255, 255, 0.3) 100% /* Faded bottom */
+  );
+
+  /* 2. Clip the background to the text */
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  /* 3. Make the actual text color transparent so the gradient shows */
+  color: transparent;
+
+  /* 4. Optional: A very slight drop shadow to make it pop against the fluid background */
+  filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.1));
+
+  background-size: 200% auto;
+  animation: shine 8s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Right Side Bullets */
+.bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  text-align: right;
+}
+
+.bullet-list li {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  font-size: 1.25rem;
+}
+
+/* Custom Bullet Shapes */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #60a5fa;
+}
+.diamond {
+  width: 7px;
+  height: 7px;
+  background: #f6edff;
+  transform: rotate(45deg);
+}
+.square-outline {
+  width: 7px;
+  height: 7px;
+  border: 1px solid white;
+  transform: rotate(15deg);
+}
+.square-solid {
+  width: 7px;
+  height: 7px;
+  background: white;
+}
+
+.glow-blue {
+  box-shadow: 0 0 10px #60a5fa;
+}
+.glow-purple {
+  box-shadow: 0 0 10px #f0e2fc;
+}
+
+/* Bottom Section */
+.bottom-section {
+  position: absolute;
+  bottom: 3rem;
+  left: 3rem;
+  right: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.credits-placeholder {
+  font-size: 10px;
+  opacity: 0.3;
+  writing-mode: vertical-rl;
+  text-transform: uppercase;
+}
+
+.title-with-logo {
+  display: flex;
+  align-items: center; /* Vertical centering */
+  gap: 1rem; /* Space between logo and text */
+}
+
+.logo-img {
+  width: 32px; /* Adjust based on your logo design */
+  height: auto;
+  opacity: 0.9;
+}
+
+/* On Mobile: Center the logo group */
+@media (max-width: 1024px) {
+  .title-with-logo {
+    flex-direction: column; /* Stack logo on top of text for mobile */
+    gap: 0.5rem;
+  }
+}
+
+/* --- RESPONSIVE LOGIC --- */
+
+@media (max-width: 1024px) {
+  /* Hide right side bullets on Tablets and Mobile */
+  .bullet-group {
+    display: none;
+  }
+
+  /* Center the title and reduce size */
+  .top-section {
+    justify-content: center;
+    /* margin-top: 15vh; Push down for the parasite model */
+  }
+
+  .title-group {
+    text-align: center;
+    align-items: center;
+  }
+
+  .main-title {
+    font-size: 1rem;
+  }
+
+  .sub-title {
+    font-size: 3rem;
+  }
+
+  /* Adjust bottom padding for mobile if needed */
+  .bottom-section {
+    bottom: 2rem;
+    left: 2rem;
+    right: 2rem;
+  }
+}
