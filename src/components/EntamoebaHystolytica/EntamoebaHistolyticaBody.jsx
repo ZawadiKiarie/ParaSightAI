@@ -91,8 +91,6 @@ export function EntHistTrophModel(props) {
           morphTargetInfluences={nodes.Cytoplasm.morphTargetInfluences}
           scale={[1, 0.708, 1]}
         >
-          {/* <LavaCytoplasmMaterial /> */}
-          {/* <IQWarpedMaterial /> */}
           <VolumetricParasiteMaterial />
         </mesh>
 
@@ -106,18 +104,29 @@ export function EntHistTrophModel(props) {
           scale={[1.114, 0.789, 1.114]}
         >
           <WarpedCytoplasmMaterial />
+          {/* <meshPhysicalMaterial
+            color={"#cceed3"}
+            transparent={true}
+            opacity={0.8}
+            transmission={0.1}
+            thickness={1.0}
+            roughness={0.2}
+            metalness={0}
+            ior={1.33}
+            depthWrite={false}
+          /> */}
         </mesh>
 
         {/* EMPTY FOOD VACUOLES */}
         <group name="Vacuoles">
           <FoodVacuole position={[0.5, 0.2, 0.3]} scale={0.15} />
-          <FoodVacuole
+          {/* <FoodVacuole
             position={[-0.4, -0.1, 0.2]}
             scale={0.12}
             rotation={[1, 0, 0.5]}
           />
-          <FoodVacuole position={[0.1, -0.2, 0.2]} scale={0.18} />
-          <FoodVacuole position={[-0.7, -0.1, 0.7]} scale={0.11} />
+          <FoodVacuole position={[0.1, -0.2, 0.2]} scale={0.18} /> */}
+          {/* <FoodVacuole position={[-0.7, -0.1, 0.7]} scale={0.11} />
           <FoodVacuole position={[-0.5, 0.2, 1.0]} scale={0.05} />
           <FoodVacuole
             position={[0.4, -0.1, -0.2]}
@@ -140,22 +149,21 @@ export function EntHistTrophModel(props) {
             position={[0.24, -0.1, -0.22]}
             scale={0.03}
             rotation={[1, 0, 0.5]}
-          />
+          /> */}
         </group>
 
         {/* INGESTED RBC */}
         <group name="VacuolesRBC">
           <VacuolesWRBC position={[0.65, 0.12, 0.13]} scale={0.11} />
-          <VacuolesWRBC
+          {/* <VacuolesWRBC
             position={[-0.6, 0.01, -0.5]}
             scale={0.17}
             rotation={[1, 0, 0.5]}
           />
-          <VacuolesWRBC position={[-0.51, 0.12, 0.42]} scale={0.14} />
-          {/* <VacuolesWRBC position={[-0.17, -0.11, 0.5]} scale={0.12} /> */}
+          <VacuolesWRBC position={[-0.51, 0.12, 0.42]} scale={0.14} /> */}
         </group>
 
-        <CytoplasmParticles position={[-0.2, 0.1, 0.09]} />
+        {/* <CytoplasmParticles position={[-0.2, 0.1, 0.09]} /> */}
       </group>
     </group>
   );

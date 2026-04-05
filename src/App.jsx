@@ -1,21 +1,49 @@
 import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
-import { IntroPage } from "./components/IntroPage";
 import OverlayUI from "./components/OverlayUI";
 import { LoadingScreen } from "./components/LoadingScreen";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
+import { BackgroundGradient } from "./components/BackgroundGraident";
+import { FloatingBubbles } from "./components/FloatingBubbles";
+import { InteractiveCrosshair } from "./components/InteractiveCrosshair";
+import { SpecimenStage } from "./components/SpecimenStage";
+import { useAtom } from "jotai";
+import { viewAtom } from "./store/store";
+import { AnimatePresence } from "motion/react";
+import { ListOverlay } from "./components/ListOverlay";
+import { StageToggle } from "./components/StageToggle";
 
 function App() {
-  const [start, setStart] = useState(false);
+  const [view] = useAtom(viewAtom);
   return (
     <>
-      <LoadingScreen started={start} onStarted={() => setStart(true)} />
+      {/* <LoadingScreen /> */}
       <div className="experience">
         <Canvas className="experience-canvas">
-          <Suspense fallback={null}>{start && <IntroPage />}</Suspense>
+          <Suspense fallback={null}>
+            <ambientLight intensity={0.5} />
+
+            {/* PERSISTENT 3D ELEMENTS */}
+            <BackgroundGradient />
+            <FloatingBubbles count={70} />
+            <InteractiveCrosshair />
+
+            {/* DYNAMIC 3D MODEL */}
+            <SpecimenStage />
+          </Suspense>
         </Canvas>
 
-        {start && <OverlayUI />}
+        {/* UI LAYER with Transitions */}
+        <AnimatePresence mode="wait">
+          {view === "HOME" ? (
+            <OverlayUI key="home-ui" />
+          ) : (
+            <div key="list-ui-wrapper">
+              <ListOverlay />
+              <StageToggle />
+            </div>
+          )}
+        </AnimatePresence>
       </div>
     </>
   );

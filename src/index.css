@@ -490,3 +490,149 @@
   background: white;
   color: #050a28;
 }
+
+/* HOME */
+.modal-side {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 24px;
+  width: 280px;
+  pointer-events: auto;
+}
+
+.left {
+  left: 40px;
+}
+.right {
+  right: 40px;
+}
+
+.list-item {
+  padding: 12px 0;
+  font-size: 14px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  opacity: 0.4;
+  transition: all 0.3s ease;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.list-item.active,
+.list-item:hover {
+  opacity: 1;
+  color: #60a5fa;
+  padding-left: 10px; /* Slight shift like Awwwards */
+}
+
+.stage-toggle-container {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(147, 197, 253, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 4px;
+  border-radius: 100px;
+  display: flex;
+  gap: 5px;
+  pointer-events: auto;
+}
+/* ... rest of buttons style ... */
+
+/* Container for all List-View UI */
+.overlay-ui-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none; /* Allows clicking 3D model through the gaps */
+  z-index: 20;
+}
+
+/* TOP RIGHT LOGO */
+.logo-top-right {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  z-index: 50;
+  pointer-events: auto;
+}
+
+.logo-text {
+  font-family: "Inter", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  color: white;
+}
+
+.logo-text .ai {
+  font-weight: 700;
+  color: #60a5fa; /* Signature Blue */
+  margin-left: 2px;
+}
+
+/* MODAL STYLING */
+.modal-side {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(30px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2.5rem 1.5rem;
+  border-radius: 30px;
+  width: 320px;
+  pointer-events: auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: #60a5fa;
+  margin-bottom: 2rem;
+  font-weight: 700;
+}
+
+/* FEATURE LIST SPECIFICS */
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: color 0.3s ease;
+}
+
+.feature-dot {
+  width: 6px;
+  height: 6px;
+  background: #60a5fa;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #60a5fa;
+}
+
+/* STAGE TOGGLE BUTTONS */
+.stage-toggle-container button {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 8px 20px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border-radius: 100px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.stage-toggle-container button.active {
+  background: white;
+  color: #050a28;
+}

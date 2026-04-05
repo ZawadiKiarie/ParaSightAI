@@ -8,12 +8,12 @@ export const IntroPage = () => {
   return (
     <group>
       <ambientLight intensity={0.5} />
-      <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-      <pointLight position={[-10, -10, -10]} />
+      {/* <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+      <pointLight position={[-10, -10, -10]} /> */}
 
       <Center>
-        <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
-          <EntHistTrophModel scale={0.5} position={[0, 0, 6.5]} />
+        <Float speed={1.5} rotationIntensity={1.2} floatIntensity={1.5}>
+          <EntHistTrophModel scale={2.0} position={[1, 0, 0]} />
         </Float>
       </Center>
       <BackgroundGradient />
