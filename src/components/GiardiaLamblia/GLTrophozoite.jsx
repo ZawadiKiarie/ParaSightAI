@@ -5,9 +5,9 @@ Command: npx gltfjsx@6.5.3 public/models/GLTrophozoite-v1.glb -o src/components/
 
 import React, { useEffect, useMemo } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
-import CytoplasmMaterialImpl from "./GLshaders/CytoplasmMaterial";
+import CytoplasmMaterialImpl from "./Shaders/CytoplasmMaterial";
 import * as THREE from "three";
-import { createGiardiaMaterials } from "./GLshaders/GLMaterials";
+import { createGiardiaMaterials } from "./Shaders/GLMaterials";
 
 export function GLTrophozoite(props) {
   const group = React.useRef();
