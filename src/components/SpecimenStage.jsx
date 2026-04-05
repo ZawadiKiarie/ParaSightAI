@@ -45,7 +45,9 @@ export const SpecimenStage = () => {
         <group ref={groupRef}>
           {/* Key on the inner wrapper ensures the model itself swaps 
               smoothly when the parasite/stage changes */}
-          <group key={`${id}-${stage}`}>{config.Component}</group>
+          <group key={`${id}-${stage}`} position={config.position}>
+            {config.Component}
+          </group>
         </group>
       </Center>
     </Float>

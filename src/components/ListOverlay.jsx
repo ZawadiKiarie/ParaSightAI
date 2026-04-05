@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { motion, AnimatePresence } from "motion/react";
 import { viewAtom, parasiteAtom, stageAtom } from "../store/store";
-import { PARASITE_DATA } from "./ParasiteConfig";
+import { PARASITE_DATA, getAvailableStages } from "./ParasiteConfig";
+import { useEffect, useState } from "react";
 
 export const ListOverlay = () => {
   const [view] = useAtom(viewAtom);
@@ -10,6 +10,13 @@ export const ListOverlay = () => {
   const [stage] = useAtom(stageAtom);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
+
+  const currentParasiteData = PARASITE_DATA[currentParasite];
+  const availableStages = getAvailableStages(currentParasite);
+  const safeStage = availableStages.includes(stage)
+    ? stage
+    : availableStages[0];
+  const currentStageData = currentParasiteData?.[safeStage];
 
   useEffect(() => {
     const handleResize = () => {
@@ -104,27 +111,21 @@ export const ListOverlay = () => {
           </div>
 
           <div className="list-container">
-            {PARASITE_DATA[currentParasite][stage].features.map(
-              (feature, i) => (
-                // <div key={i} className="feature-item">
-                //   <div className="feature-bullet" />
-                //   <span className="feature-text">{feature}</span>
-                // </div>
-                <button
-                  type="button"
-                  key={i}
-                  className="list-item"
-                  onClick={() => {}}
-                >
-                  <div className="list-item-left">
-                    <div className="feature-bullet" />
-                    <span className="feature-text">{feature}</span>
-                  </div>
+            {currentStageData?.features.map((feature, i) => (
+              <button
+                type="button"
+                key={i}
+                className="list-item"
+                onClick={() => {}}
+              >
+                <div className="list-item-left">
+                  <div className="feature-bullet" />
+                  <span className="feature-text">{feature}</span>
+                </div>
 
-                  <span className="item-arrow">›</span>
-                </button>
-              ),
-            )}
+                <span className="item-arrow">›</span>
+              </button>
+            ))}
           </div>
         </motion.div>
       )}
@@ -133,7 +134,7 @@ export const ListOverlay = () => {
         <div className="mobile-bottom-info">
           <div className="current-selection-label">
             <h2>{PARASITE_DATA[currentParasite].name}</h2>
-            <p>{stage.toUpperCase()} STAGE</p>
+            <p>{safeStage.toUpperCase()} STAGE</p>
           </div>
           <div className="marker-hint">Tap markers for details</div>
         </div>

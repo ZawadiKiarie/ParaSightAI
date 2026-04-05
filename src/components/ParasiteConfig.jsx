@@ -16,7 +16,6 @@ export const PARASITE_DATA = {
   EntamoebaHystolytica: {
     id: "01",
     name: "Entamoeba Histolytica",
-    hasToggle: true,
     trophozoite: {
       Component: <EntHistTrophModel />,
       features: [
@@ -25,16 +24,18 @@ export const PARASITE_DATA = {
         "Central Endosome",
         "Ingested RBCs",
       ],
+      position: [0, 0, 0],
     },
     cyst: {
-      Component: <EntHistCystModel />, // Your cyst mesh code
+      Component: <EntHistCystModel />,
       features: ["4 Nuclei", "Chromatoid Bars", "Spherical Shape"],
+      position: [0, -1, 0],
     },
   },
+
   EntamoebaHartmanni: {
     id: "02",
     name: "Entamoeba Hartmanni",
-    hasToggle: true,
     trophozoite: {
       Component: <HartmanniModel />,
       features: [
@@ -43,16 +44,18 @@ export const PARASITE_DATA = {
         "Central Endosome",
         "Ingested RBCs",
       ],
+      position: [0, 0, 0],
     },
     cyst: {
-      Component: <HartmanniCystModel />, // Your cyst mesh code
+      Component: <HartmanniCystModel />,
       features: ["4 Nuclei", "Chromatoid Bars", "Spherical Shape"],
+      position: [0, 0, 0],
     },
   },
+
   EntamoebaColi: {
     id: "03",
     name: "Entamoeba Coli",
-    hasToggle: true,
     trophozoite: {
       Component: <EColiModel2 />,
       features: [
@@ -61,16 +64,18 @@ export const PARASITE_DATA = {
         "Central Endosome",
         "Ingested RBCs",
       ],
+      position: [0, 0, 0],
     },
     cyst: {
-      Component: <EColiCystModel />, // Your cyst mesh code
+      Component: <EColiCystModel />,
       features: ["4 Nuclei", "Chromatoid Bars", "Spherical Shape"],
+      position: [0, 0, 0],
     },
   },
+
   GiardiaLamblia: {
     id: "04",
     name: "Giardia Lamblia",
-    hasToggle: true,
     trophozoite: {
       Component: <GLTrophozoite />,
       features: [
@@ -79,16 +84,18 @@ export const PARASITE_DATA = {
         "Central Endosome",
         "Ingested RBCs",
       ],
+      position: [0, 0, 0],
     },
     cyst: {
-      Component: <GLCystModel />, // Your cyst mesh code
+      Component: <GLCystModel />,
       features: ["4 Nuclei", "Chromatoid Bars", "Spherical Shape"],
+      position: [0, 0, 0],
     },
   },
+
   BlastoCystis: {
     id: "05",
     name: "BlastoCystis",
-    hasToggle: true,
     vacuole: {
       Component: <BCVacuole />,
       features: [
@@ -97,17 +104,19 @@ export const PARASITE_DATA = {
         "Central Endosome",
         "Ingested RBCs",
       ],
+      position: [0, 0, 0],
     },
     cyst: {
-      Component: <BlastoCystisCyst />, // Your cyst mesh code
+      Component: <BlastoCystisCyst />,
       features: ["4 Nuclei", "Chromatoid Bars", "Spherical Shape"],
+      position: [0, 0, 0],
     },
   },
+
   CryptoSporidium: {
     id: "06",
     name: "CryptoSporidium",
-    hasToggle: false,
-    Oocyst: {
+    oocyst: {
       Component: <CryptoSporidiumOocyst />,
       features: [
         "Single Nucleus",
@@ -115,13 +124,14 @@ export const PARASITE_DATA = {
         "Central Endosome",
         "Ingested RBCs",
       ],
+      position: [0, 0, 0],
     },
   },
+
   CystoisosporaBelli: {
     id: "07",
-    name: "CystoisosporaBelli",
-    hasToggle: false,
-    Oocyst: {
+    name: "Cystoisospora Belli",
+    oocyst: {
       Component: <CBOocyst />,
       features: [
         "Single Nucleus",
@@ -129,13 +139,14 @@ export const PARASITE_DATA = {
         "Central Endosome",
         "Ingested RBCs",
       ],
+      position: [0, 0, 0],
     },
   },
+
   DientamoebaFragilis: {
     id: "08",
-    name: "DientamoebaFragilis",
-    hasToggle: false,
-    Oocyst: {
+    name: "Dientamoeba Fragilis",
+    oocyst: {
       Component: <DFTrophozoite />,
       features: [
         "Single Nucleus",
@@ -143,7 +154,23 @@ export const PARASITE_DATA = {
         "Central Endosome",
         "Ingested RBCs",
       ],
+      position: [0, 0, 0],
     },
   },
-  // ... Repeat for the other 7 parasites
+};
+
+export const STAGE_ORDER = ["trophozoite", "vacuole", "cyst", "oocyst"];
+
+export const STAGE_LABELS = {
+  trophozoite: "TROPHOZOITE",
+  vacuole: "VACUOLE",
+  cyst: "CYST",
+  oocyst: "OOCYST",
+};
+
+export const getAvailableStages = (parasiteId) => {
+  const parasite = PARASITE_DATA[parasiteId];
+  if (!parasite) return [];
+
+  return STAGE_ORDER.filter((stage) => parasite[stage]);
 };
