@@ -1,59 +1,34 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
-import { WarpedCytoplasmMaterial } from "../WarpedCytoplasmMaterial";
+import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { IQWarpedMaterial } from "../IQWarpedMaterial";
 import { EntHistNucleus } from "./EntHistNucleus";
 import { FoodVacuole } from "./EmptyVacuole";
 import { VacuolesWRBC } from "./EntHistVacuoleWRBC";
-import { CytoplasmParticles } from "../CytoplasmParticles";
 import { VolumetricParasiteMaterial } from "../EntamoebaHartmanni/FireShader";
-import { useFrame } from "@react-three/fiber";
+import { WarpedCytoplasmMaterial } from "../WarpedCytoplasmMaterial";
+import { useAtomValue } from "jotai";
+import { hoveredMarkerAtom } from "../../store/store";
 
 export function EntHistTrophModel(props) {
-  const group = React.useRef();
-  const { nodes, _materials, animations } = useGLTF(
-    "/models/enthystbody-v1.glb",
-  );
+  const group = useRef();
+  const nucleusGroupRef = useRef();
+  const rbcGroupRef = useRef();
+  const cytoplasmMaterialRef = useRef();
+  const outerMembraneMaterialRef = useRef();
+
+  const hoveredMarkerId = useAtomValue(hoveredMarkerAtom);
+
+  const { nodes, animations } = useGLTF("/models/enthystbody-v1.glb");
   const { actions } = useAnimations(animations, group);
 
-  // --- MOUSE TRACKING LOGIC ---
-  // useFrame((state) => {
-  //   if (!group.current) return;
+  const isNucleusHovered =
+    hoveredMarkerId === "nucleus" ||
+    hoveredMarkerId === "karyosome" ||
+    hoveredMarkerId === "chromatin";
 
-  //   const { pointer } = state;
-
-  //   // Inside useFrame
-  //   const time = state.clock.getElapsedTime();
-  //   group.current.position.y = Math.sin(time * 0.5) * 0.1; // Gentle floating up/down
-
-  //   // 1. Define target rotations based on mouse position (-1 to 1)
-  //   // Vertical mouse (y) rotates the X-axis
-  //   // Horizontal mouse (x) rotates the Y-axis
-  //   const targetX = -pointer.y * 0.5; // Up/Down
-  //   const targetY = pointer.x * 0.5; // Left/Right
-
-  //   // 2. Smoothly interpolate to the target
-  //   // 0.05 is the 'damping' factor. Lower = smoother/laggier.
-  //   group.current.rotation.x = THREE.MathUtils.lerp(
-  //     group.current.rotation.x,
-  //     targetX,
-  //     0.05,
-  //   );
-  //   group.current.rotation.y = THREE.MathUtils.lerp(
-  //     group.current.rotation.y,
-  //     targetY,
-  //     0.05,
-  //   );
-  // });
-
-  // Continuous Rotation Logic
-  // useFrame((state, delta) => {
-  //   if (group.current) {
-  //     // Adjust '0.5' to make it spin faster or slower
-  //     group.current.rotation.y += delta * 0.5;
-  //   }
-  // });
+  const isRBCHovered = hoveredMarkerId === "RBC";
+  const isCytoplasmHovered = hoveredMarkerId === "cytoplasm";
 
   useEffect(() => {
     const actionNames = ["Cube.002Action", "Cube.002Action.001"];
@@ -62,25 +37,84 @@ export function EntHistTrophModel(props) {
       const action = actions?.[name];
       if (action) {
         action.reset().fadeIn(0.5).play();
-      } else {
-        console.warn(`Animation not found: ${name}`);
       }
     });
 
     return () => {
-      actionNames.forEach((name) => actions?.[name]?.fadeOut(0.5));
+      actionNames.forEach((name) => {
+        actions?.[name]?.fadeOut(0.5);
+      });
     };
   }, [actions]);
+
+  useFrame((_, delta) => {
+    const lerpFactor = 1 - Math.exp(-8 * delta);
+
+    const targetNucleusScale = isNucleusHovered ? 1.35 : 1;
+    const targetRbcScale = isRBCHovered ? 1.28 : 1;
+
+    const targetCytoplasmOpacity =
+      isNucleusHovered || isRBCHovered ? 0.16 : isCytoplasmHovered ? 0.88 : 0.6;
+
+    const targetHeat = isCytoplasmHovered ? 1.3 : 1.2;
+
+    const targetOuterOpacity =
+      isNucleusHovered || isRBCHovered
+        ? 0.08
+        : isCytoplasmHovered
+          ? 0.32
+          : 0.45;
+
+    if (nucleusGroupRef.current) {
+      const current = nucleusGroupRef.current.scale.x;
+      const next = THREE.MathUtils.lerp(
+        current,
+        targetNucleusScale,
+        lerpFactor,
+      );
+      nucleusGroupRef.current.scale.setScalar(next);
+    }
+
+    if (rbcGroupRef.current) {
+      const current = rbcGroupRef.current.scale.x;
+      const next = THREE.MathUtils.lerp(current, targetRbcScale, lerpFactor);
+      rbcGroupRef.current.scale.setScalar(next);
+    }
+
+    if (cytoplasmMaterialRef.current) {
+      cytoplasmMaterialRef.current.uOpacity = THREE.MathUtils.lerp(
+        cytoplasmMaterialRef.current.uOpacity,
+        targetCytoplasmOpacity,
+        lerpFactor,
+      );
+
+      cytoplasmMaterialRef.current.uHeat = THREE.MathUtils.lerp(
+        cytoplasmMaterialRef.current.uHeat,
+        targetHeat,
+        lerpFactor,
+      );
+    }
+
+    if (outerMembraneMaterialRef.current) {
+      outerMembraneMaterialRef.current.uOpacity = THREE.MathUtils.lerp(
+        outerMembraneMaterialRef.current.uOpacity,
+        targetOuterOpacity,
+        lerpFactor,
+      );
+    }
+  });
 
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
         {/* NUCLEUS */}
-        <EntHistNucleus
-          position={[0, 0, 0]}
-          scale={0.2}
-          rotation={[0, -Math.PI / 2, 0]}
-        />
+        <group ref={nucleusGroupRef}>
+          <EntHistNucleus
+            position={[0, 0, 0]}
+            scale={0.2}
+            rotation={[0, -Math.PI / 2, 0]}
+          />
+        </group>
 
         {/* CYTOPLASM */}
         <mesh
@@ -91,7 +125,11 @@ export function EntHistTrophModel(props) {
           morphTargetInfluences={nodes.Cytoplasm.morphTargetInfluences}
           scale={[1, 0.708, 1]}
         >
-          <VolumetricParasiteMaterial />
+          <VolumetricParasiteMaterial
+            ref={cytoplasmMaterialRef}
+            opacity={0.6}
+            heat={1.2}
+          />
         </mesh>
 
         {/* OUTER MEMBRANE */}
@@ -103,67 +141,21 @@ export function EntHistTrophModel(props) {
           morphTargetInfluences={nodes.OuterMembrane.morphTargetInfluences}
           scale={[1.114, 0.789, 1.114]}
         >
-          <WarpedCytoplasmMaterial />
-          {/* <meshPhysicalMaterial
-            color={"#cceed3"}
-            transparent={true}
-            opacity={0.8}
-            transmission={0.1}
-            thickness={1.0}
-            roughness={0.2}
-            metalness={0}
-            ior={1.33}
-            depthWrite={false}
-          /> */}
+          <WarpedCytoplasmMaterial
+            ref={outerMembraneMaterialRef}
+            opacity={0.45}
+          />
         </mesh>
 
         {/* EMPTY FOOD VACUOLES */}
         <group name="Vacuoles">
           <FoodVacuole position={[0.5, 0.2, 0.3]} scale={0.15} />
-          {/* <FoodVacuole
-            position={[-0.4, -0.1, 0.2]}
-            scale={0.12}
-            rotation={[1, 0, 0.5]}
-          />
-          <FoodVacuole position={[0.1, -0.2, 0.2]} scale={0.18} /> */}
-          {/* <FoodVacuole position={[-0.7, -0.1, 0.7]} scale={0.11} />
-          <FoodVacuole position={[-0.5, 0.2, 1.0]} scale={0.05} />
-          <FoodVacuole
-            position={[0.4, -0.1, -0.2]}
-            scale={0.02}
-            rotation={[1, 0, 0.5]}
-          />
-          <FoodVacuole position={[0.1, 0.2, -0.2]} scale={0.04} />
-          <FoodVacuole position={[0.1, 0.1, 0.7]} scale={0.08} />
-          <FoodVacuole
-            position={[0.24, -0.1, 0.02]}
-            scale={0.03}
-            rotation={[1, 0, 0.5]}
-          />
-          <FoodVacuole
-            position={[0.24, -0.1, -0.22]}
-            scale={0.04}
-            rotation={[1, 0, 0.5]}
-          />
-          <FoodVacuole
-            position={[0.24, -0.1, -0.22]}
-            scale={0.03}
-            rotation={[1, 0, 0.5]}
-          /> */}
         </group>
 
         {/* INGESTED RBC */}
-        <group name="VacuolesRBC">
+        <group name="VacuolesRBC" ref={rbcGroupRef}>
           <VacuolesWRBC position={[0.65, 0.12, 0.13]} scale={0.11} />
-          {/* <VacuolesWRBC
-            position={[-0.6, 0.01, -0.5]}
-            scale={0.17}
-            rotation={[1, 0, 0.5]}
-          />
-          <VacuolesWRBC position={[-0.51, 0.12, 0.42]} scale={0.14} /> */}
         </group>
-
-        {/* <CytoplasmParticles position={[-0.2, 0.1, 0.09]} /> */}
       </group>
     </group>
   );

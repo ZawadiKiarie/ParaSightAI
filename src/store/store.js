@@ -8,3 +8,5 @@ export const parasiteAtom = atom("EntamoebaHystolytica");
 
 // The life stage: 'trophozoite', 'cyst', 'oocyst', etc.
 export const stageAtom = atom("trophozoite");
+
+export const hoveredMarkerAtom = atom(null);

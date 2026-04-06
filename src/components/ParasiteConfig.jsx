@@ -17,19 +17,51 @@ export const PARASITE_DATA = {
     id: "01",
     name: "Entamoeba Histolytica",
     trophozoite: {
-      Component: <EntHistTrophModel />,
+      Component: <EntHistTrophModel rotation={[0, Math.PI, 0]} />,
       features: [
-        "Single Nucleus",
-        "Peripheral Chromatin",
-        "Central Endosome",
+        "One Nucleus",
+        "Small central karyosome",
+        "Fine Peripheral Chromatin",
         "Ingested RBCs",
+        "granular/ground-glass cytoplasm",
       ],
-      position: [0, 0, 0],
+      markers: [
+        {
+          id: "nucleus",
+          label: "One Nucleus",
+          position: [-0.08, 0.29, 0.58],
+        },
+        {
+          id: "karyosome",
+          label: "Central karyosome",
+          position: [0.05, 0.19, 0.42],
+        },
+        {
+          id: "chromatin",
+          label: "Peripheral Chromatin",
+          position: [0.2, 0.14, 0.12],
+        },
+        {
+          id: "RBC",
+          label: "Ingested RBC",
+          position: [-0.47, 0.26, 0.42],
+        },
+        {
+          id: "cytoplasm",
+          label: "granular cytoplasm",
+          position: [0.66, 0.02, 0.21],
+        },
+      ],
     },
     cyst: {
       Component: <EntHistCystModel />,
-      features: ["4 Nuclei", "Chromatoid Bars", "Spherical Shape"],
-      position: [0, -1, 0],
+      features: [
+        "4 Nuclei",
+        "Chromatoid bodies",
+        "Rounded cyst wall",
+        "centrally-located karyosome",
+      ],
+      // position: [0, -1, 0],
     },
   },
 
@@ -37,19 +69,25 @@ export const PARASITE_DATA = {
     id: "02",
     name: "Entamoeba Hartmanni",
     trophozoite: {
-      Component: <HartmanniModel />,
+      Component: <HartmanniModel scale={0.5} />,
       features: [
-        "Single Nucleus",
-        "Peripheral Chromatin",
-        "Central Endosome",
-        "Ingested RBCs",
+        "One Nucleus",
+        "Central Karyosome",
+        "Fine Peripheral Chromatin",
+        "No Ingested RBCs",
       ],
-      position: [0, 0, 0],
+      // position: [0, 0, 0],
     },
     cyst: {
       Component: <HartmanniCystModel />,
-      features: ["4 Nuclei", "Chromatoid Bars", "Spherical Shape"],
-      position: [0, 0, 0],
+      features: [
+        "4 Nuclei",
+        "Rounded/Elongated Chromatoid Bars",
+        "Spherical Shape",
+        "centrally-located kayrosome",
+        "evenly-distributed chromatin",
+      ],
+      // position: [0, 0, 0],
     },
   },
 
@@ -60,16 +98,21 @@ export const PARASITE_DATA = {
       Component: <EColiModel2 />,
       features: [
         "Single Nucleus",
-        "Peripheral Chromatin",
-        "Central Endosome",
-        "Ingested RBCs",
+        "Coarse Peripheral Chromatin",
+        "Eccentric karyosome",
+        "dirty cytoplasm",
+        "short and blunt pseudopodia",
       ],
-      position: [0, 0, 0],
+      // position: [0, 1, 1],
     },
     cyst: {
-      Component: <EColiCystModel />,
-      features: ["4 Nuclei", "Chromatoid Bars", "Spherical Shape"],
-      position: [0, 0, 0],
+      Component: <EColiCystModel scale={1.0} />,
+      features: [
+        "8 Nuclei",
+        "Splinter-like Chromatoid bodies",
+        "Thick cyst wall",
+      ],
+      // position: [0, 0, 0],
     },
   },
 
@@ -79,17 +122,19 @@ export const PARASITE_DATA = {
     trophozoite: {
       Component: <GLTrophozoite />,
       features: [
-        "Single Nucleus",
-        "Peripheral Chromatin",
-        "Central Endosome",
-        "Ingested RBCs",
+        "Two nuclei",
+        "Pear-shaped body",
+        "8 flagella",
+        "Ventral adhesive disk",
+        "Bilaterial symmetry",
       ],
-      position: [0, 0, 0],
+      // position: [0, 0, 0],
+      scale: 0.5,
     },
     cyst: {
-      Component: <GLCystModel />,
-      features: ["4 Nuclei", "Chromatoid Bars", "Spherical Shape"],
-      position: [0, 0, 0],
+      Component: <GLCystModel scale={0.5} />,
+      features: ["4 Nuclei", "Internal axonemes visible", "Oval cyst Shape"],
+      // position: [0, -1, 0],
     },
   },
 
@@ -99,17 +144,16 @@ export const PARASITE_DATA = {
     vacuole: {
       Component: <BCVacuole />,
       features: [
-        "Single Nucleus",
-        "Peripheral Chromatin",
-        "Central Endosome",
-        "Ingested RBCs",
+        "large central vacuole",
+        "thin cytoplasmic ring",
+        "Peripheral nuclei",
       ],
-      position: [0, 0, 0],
+      // position: [0, 0, 0],
     },
     cyst: {
       Component: <BlastoCystisCyst />,
-      features: ["4 Nuclei", "Chromatoid Bars", "Spherical Shape"],
-      position: [0, 0, 0],
+      features: ["Thick cyst wall", "Compact internal structures", "Nuclei"],
+      // position: [0, 0, 0],
     },
   },
 
@@ -118,13 +162,8 @@ export const PARASITE_DATA = {
     name: "CryptoSporidium",
     oocyst: {
       Component: <CryptoSporidiumOocyst />,
-      features: [
-        "Single Nucleus",
-        "Peripheral Chromatin",
-        "Central Endosome",
-        "Ingested RBCs",
-      ],
-      position: [0, 0, 0],
+      features: ["4 sporozoites", "Thick outer wall", "Small spherical oocyst"],
+      // position: [0, 0, 0],
     },
   },
 
@@ -134,12 +173,12 @@ export const PARASITE_DATA = {
     oocyst: {
       Component: <CBOocyst />,
       features: [
-        "Single Nucleus",
-        "Peripheral Chromatin",
-        "Central Endosome",
-        "Ingested RBCs",
+        "ellongated ellipsiadal shape",
+        "Smooth outer wall",
+        "2 sporocysts",
+        "4 sporozoite per sporocyst",
       ],
-      position: [0, 0, 0],
+      // position: [0, 0, 0],
     },
   },
 
@@ -149,12 +188,12 @@ export const PARASITE_DATA = {
     oocyst: {
       Component: <DFTrophozoite />,
       features: [
-        "Single Nucleus",
-        "Peripheral Chromatin",
-        "Central Endosome",
-        "Ingested RBCs",
+        "2 nuclei",
+        "Fragmented nuclear chromatin",
+        "Granular cytoplasm",
+        "Irregular amoeboid shape",
       ],
-      position: [0, 0, 0],
+      // position: [0, 0, 0],
     },
   },
 };

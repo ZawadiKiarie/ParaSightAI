@@ -15,7 +15,7 @@ export function GLTrophozoite(props) {
     "/models/GLTrophozoite-v1.glb",
   );
   const { actions } = useAnimations(animations, group);
-  // console.log(actions);
+  console.log("trophozoite");
 
   const {
     nucleusMaterial,

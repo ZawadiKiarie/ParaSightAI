@@ -912,3 +912,76 @@
     letter-spacing: 0.14em;
   }
 }
+
+/* MARKERS */
+/* MARKERS */
+.diagnostic-marker {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  transition:
+    transform 0.28s ease,
+    filter 0.28s ease;
+}
+
+.diagnostic-marker:hover {
+  transform: scale(1.05);
+  filter: brightness(1.08);
+}
+
+.marker-ring {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.ring-outer {
+  width: 32px;
+  height: 32px;
+  border: 1.2px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0 10px rgba(188, 225, 255, 0.08);
+}
+
+.ring-inner {
+  width: 22px;
+  height: 22px;
+  border: 1.2px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 0 8px rgba(178, 210, 255, 0.12),
+    0 0 14px rgba(150, 120, 255, 0.08);
+}
+
+.marker-core {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 4px rgba(147, 211, 255, 0.28),
+    0 0 0 7px rgba(176, 146, 255, 0.12),
+    0 0 12px rgba(157, 218, 255, 0.2);
+}
+
+.diagnostic-marker:hover .ring-outer {
+  border-color: rgba(255, 255, 255, 0.86);
+}
+
+.diagnostic-marker:hover .ring-inner {
+  border-color: rgba(255, 255, 255, 1);
+}
+
+.diagnostic-marker:hover .marker-core {
+  box-shadow:
+    0 0 0 5px rgba(147, 211, 255, 0.34),
+    0 0 0 8px rgba(176, 146, 255, 0.16),
+    0 0 16px rgba(157, 218, 255, 0.28);
+}

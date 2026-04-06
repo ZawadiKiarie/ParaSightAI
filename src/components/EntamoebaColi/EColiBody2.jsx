@@ -88,7 +88,7 @@ export function EColiModel2(props) {
         {/* EMPTY FOOD VACUOLES */}
         <group name="Vacuoles">
           <EColiVacuolesWBacteria position={[0.5, 1.2, 0.3]} scale={0.15} />
-          <EColiVacuolesWBacteria
+          {/* <EColiVacuolesWBacteria
             position={[-0.4, 1.3, 0.2]}
             scale={0.12}
             rotation={[1, 0, 0.5]}
@@ -102,14 +102,14 @@ export function EColiModel2(props) {
             rotation={[1, 0, 0.5]}
           />
           <EColiVacuolesWBacteria position={[0.6, 0.7, -0.2]} scale={0.04} />
-          <EColiVacuolesWBacteria position={[0.1, 0.7, 0.7]} scale={0.08} />
+          <EColiVacuolesWBacteria position={[0.1, 0.7, 0.7]} scale={0.08} /> */}
 
           <EColiVacuolesWRBC
             position={[-0.24, 0.5, 0.02]}
             scale={0.13}
             rotation={[1, 0, 0.5]}
           />
-          <EColiVacuolesWRBC
+          {/* <EColiVacuolesWRBC
             position={[0.14, 0.7, -0.22]}
             scale={0.14}
             rotation={[1, 0, 0.5]}
@@ -118,7 +118,7 @@ export function EColiModel2(props) {
             position={[-0.68, 1.1, -0.22]}
             scale={0.13}
             rotation={[1, 0, 0.5]}
-          />
+          /> */}
         </group>
       </group>
     </group>

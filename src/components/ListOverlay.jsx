@@ -1,6 +1,11 @@
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { motion, AnimatePresence } from "motion/react";
-import { viewAtom, parasiteAtom, stageAtom } from "../store/store";
+import {
+  viewAtom,
+  parasiteAtom,
+  stageAtom,
+  hoveredMarkerAtom,
+} from "../store/store";
 import { PARASITE_DATA, getAvailableStages } from "./ParasiteConfig";
 import { useEffect, useState } from "react";
 
@@ -8,6 +13,8 @@ export const ListOverlay = () => {
   const [view] = useAtom(viewAtom);
   const [currentParasite, setParasite] = useAtom(parasiteAtom);
   const [stage] = useAtom(stageAtom);
+  const setHoveredMarker = useSetAtom(hoveredMarkerAtom);
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
 
@@ -30,8 +37,13 @@ export const ListOverlay = () => {
 
     handleResize();
     window.addEventListener("resize", handleResize);
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    setHoveredMarker(null);
+  }, [currentParasite, safeStage, setHoveredMarker]);
 
   if (view !== "LIST") return null;
 
@@ -81,6 +93,7 @@ export const ListOverlay = () => {
                   key={id}
                   className={`list-item ${currentParasite === id ? "active" : ""}`}
                   onClick={() => {
+                    setHoveredMarker(null);
                     setParasite(id);
                     if (isMobile) setIsMobileMenuOpen(false);
                   }}
@@ -105,27 +118,38 @@ export const ListOverlay = () => {
           exit={{ x: 40, opacity: 0, y: "-50%" }}
           transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           className="modal-side right"
+          onMouseLeave={() => setHoveredMarker(null)}
         >
           <div className="modal-header centered">
             <span>DIAGNOSTIC FEATURES</span>
           </div>
 
           <div className="list-container">
-            {currentStageData?.features.map((feature, i) => (
-              <button
-                type="button"
-                key={i}
-                className="list-item"
-                onClick={() => {}}
-              >
-                <div className="list-item-left">
-                  <div className="feature-bullet" />
-                  <span className="feature-text">{feature}</span>
-                </div>
+            {currentStageData?.features.map((feature, i) => {
+              const linkedMarkerId = currentStageData?.markers?.[i]?.id ?? null;
 
-                <span className="item-arrow">›</span>
-              </button>
-            ))}
+              return (
+                <button
+                  type="button"
+                  key={`${safeStage}-${i}-${feature}`}
+                  className="list-item"
+                  onClick={() => {}}
+                  onMouseEnter={() => {
+                    if (linkedMarkerId) {
+                      setHoveredMarker(linkedMarkerId);
+                    }
+                  }}
+                  onMouseLeave={() => setHoveredMarker(null)}
+                >
+                  <div className="list-item-left">
+                    <div className="feature-bullet" />
+                    <span className="feature-text">{feature}</span>
+                  </div>
+
+                  <span className="item-arrow">›</span>
+                </button>
+              );
+            })}
           </div>
         </motion.div>
       )}

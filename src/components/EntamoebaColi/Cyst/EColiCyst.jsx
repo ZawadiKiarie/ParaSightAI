@@ -12,6 +12,7 @@ import {
 
 export function EColiCystModel(props) {
   const { nodes } = useGLTF("/models/EColiCyst-v1.glb");
+  console.log("cyst");
 
   return (
     <group {...props} dispose={null}>
