@@ -5,6 +5,8 @@ import {
   parasiteAtom,
   stageAtom,
   hoveredMarkerAtom,
+  focusedMarkerIdAtom,
+  focusedFeatureIndexAtom,
 } from "../store/store";
 import { PARASITE_DATA, getAvailableStages } from "./ParasiteConfig";
 import { useEffect, useState } from "react";
@@ -13,7 +15,11 @@ export const ListOverlay = () => {
   const [view] = useAtom(viewAtom);
   const [currentParasite, setParasite] = useAtom(parasiteAtom);
   const [stage] = useAtom(stageAtom);
+
   const setHoveredMarker = useSetAtom(hoveredMarkerAtom);
+  const setFocusedMarkerId = useSetAtom(focusedMarkerIdAtom);
+  const setFocusedFeatureIndex = useSetAtom(focusedFeatureIndexAtom);
+  const setView = useSetAtom(viewAtom);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
@@ -94,6 +100,8 @@ export const ListOverlay = () => {
                   className={`list-item ${currentParasite === id ? "active" : ""}`}
                   onClick={() => {
                     setHoveredMarker(null);
+                    setFocusedMarkerId(null);
+                    setFocusedFeatureIndex(0);
                     setParasite(id);
                     if (isMobile) setIsMobileMenuOpen(false);
                   }}
@@ -133,7 +141,12 @@ export const ListOverlay = () => {
                   type="button"
                   key={`${safeStage}-${i}-${feature}`}
                   className="list-item"
-                  onClick={() => {}}
+                  onClick={() => {
+                    if (!linkedMarkerId) return;
+                    setFocusedMarkerId(linkedMarkerId);
+                    setFocusedFeatureIndex(i);
+                    setView("FOCUS");
+                  }}
                   onMouseEnter={() => {
                     if (linkedMarkerId) {
                       setHoveredMarker(linkedMarkerId);

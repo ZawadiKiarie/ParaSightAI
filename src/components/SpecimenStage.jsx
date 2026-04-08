@@ -1,14 +1,16 @@
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
   parasiteAtom,
   stageAtom,
   viewAtom,
   hoveredMarkerAtom,
+  focusedMarkerIdAtom,
+  focusedFeatureIndexAtom,
 } from "../store/store";
 import { PARASITE_DATA } from "./ParasiteConfig";
 import { Center, Float } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
+import { useThree, useFrame } from "@react-three/fiber";
 import gsap from "gsap";
 import * as THREE from "three";
 import { DiagnosticMarker } from "./DiagnosticMarker";
@@ -17,11 +19,17 @@ export const SpecimenStage = () => {
   const id = useAtomValue(parasiteAtom);
   const stage = useAtomValue(stageAtom);
   const view = useAtomValue(viewAtom);
+  const focusedFeatureIndex = useAtomValue(focusedFeatureIndexAtom);
+
   const setHoveredMarker = useSetAtom(hoveredMarkerAtom);
 
   const outerGroupRef = useRef();
   const modelPivotRef = useRef();
+  const focusTargetRef = useRef(new THREE.Vector3(0, 0, 0));
+  const dragOffsetRef = useRef(new THREE.Vector2(0, 0));
+
   const config = PARASITE_DATA[id][stage];
+  const markers = config.markers ?? [];
 
   const { gl } = useThree();
 
@@ -31,6 +39,12 @@ export const SpecimenStage = () => {
     lastY: 0,
   });
 
+  const focusMarker = useMemo(() => {
+    if (view !== "FOCUS") return null;
+    if (!markers.length) return null;
+    return markers[focusedFeatureIndex] ?? markers[0];
+  }, [view, markers, focusedFeatureIndex]);
+
   useEffect(() => {
     setHoveredMarker(null);
   }, [id, stage, view, setHoveredMarker]);
@@ -39,13 +53,24 @@ export const SpecimenStage = () => {
     if (!outerGroupRef.current || !modelPivotRef.current) return;
 
     const isHome = view === "HOME";
-    const targetScale = isHome ? 2.0 : 1.9;
+    const isFocus = view === "FOCUS";
+
+    let targetScale = 1.9;
+    let targetX = 0;
+
+    if (isHome) {
+      targetScale = 2.0;
+      targetX = 1;
+    } else if (isFocus) {
+      targetScale = 2.55;
+      targetX = 0;
+    }
 
     gsap.killTweensOf(outerGroupRef.current.position);
     gsap.killTweensOf(outerGroupRef.current.scale);
 
     gsap.to(outerGroupRef.current.position, {
-      x: isHome ? 0.2 : 0,
+      x: targetX,
       y: 0,
       z: 0,
       duration: 1.2,
@@ -60,7 +85,17 @@ export const SpecimenStage = () => {
       ease: "power3.inOut",
     });
 
-    modelPivotRef.current.rotation.set(0, 0, 0);
+    if (view !== "FOCUS") {
+      gsap.to(modelPivotRef.current.rotation, {
+        x: 0,
+        y: 0,
+        z: 0,
+        duration: 1,
+        ease: "power3.inOut",
+      });
+    }
+
+    dragOffsetRef.current.set(0, 0);
   }, [id, stage, view]);
 
   useEffect(() => {
@@ -124,6 +159,35 @@ export const SpecimenStage = () => {
     };
   }, [gl, isDragging, view]);
 
+  useFrame((_, delta) => {
+    if (!modelPivotRef.current) return;
+
+    const ease = 1 - Math.exp(-5 * delta);
+
+    if (view === "FOCUS" && focusMarker) {
+      const [mx, my] = focusMarker.position;
+
+      focusTargetRef.current.set(-mx * 1.25, -my * 1.25, 0);
+
+      modelPivotRef.current.position.lerp(focusTargetRef.current, ease);
+
+      modelPivotRef.current.rotation.x = THREE.MathUtils.lerp(
+        modelPivotRef.current.rotation.x,
+        0,
+        ease,
+      );
+
+      modelPivotRef.current.rotation.y = THREE.MathUtils.lerp(
+        modelPivotRef.current.rotation.y,
+        0,
+        ease,
+      );
+    } else {
+      focusTargetRef.current.set(0, 0, 0);
+      modelPivotRef.current.position.lerp(focusTargetRef.current, ease);
+    }
+  });
+
   return (
     <Float
       speed={1.5}
@@ -136,11 +200,12 @@ export const SpecimenStage = () => {
             <group scale={config.scale ?? 1}>
               {config.Component}
 
-              {view === "LIST" &&
-                config.markers?.map((marker) => (
+              {view !== "HOME" &&
+                config.markers?.map((marker, index) => (
                   <DiagnosticMarker
                     key={marker.id}
                     markerId={marker.id}
+                    markerIndex={index}
                     position={marker.position}
                     label={marker.label}
                     onClick={() => {

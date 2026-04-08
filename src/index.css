@@ -914,7 +914,6 @@
 }
 
 /* MARKERS */
-/* MARKERS */
 .diagnostic-marker {
   position: relative;
   width: 24px;
@@ -984,4 +983,493 @@
     0 0 0 5px rgba(147, 211, 255, 0.34),
     0 0 0 8px rgba(176, 146, 255, 0.16),
     0 0 16px rgba(157, 218, 255, 0.28);
+}
+
+/* FOCUS MODE OVERLAY */
+/* =========================
+   FOCUS MODE OVERLAY
+========================= */
+.focus-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.focus-back-button {
+  position: fixed;
+  top: 24px;
+  left: 16px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.84);
+  color: #182141;
+  font-size: 34px;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  display: grid;
+  place-items: center;
+  box-shadow:
+    0 0 0 9px rgba(255, 255, 255, 0.12),
+    0 8px 24px rgba(93, 108, 167, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.focus-bottom-wrap {
+  position: fixed;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: min(1240px, calc(100vw - 64px));
+  pointer-events: none;
+}
+
+.focus-bottom-bar {
+  width: 100%;
+  min-height: 110px;
+  border-radius: 999px;
+  background: rgba(210, 217, 247, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(18px) saturate(120%);
+  -webkit-backdrop-filter: blur(18px) saturate(120%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 10px 24px rgba(104, 122, 184, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  pointer-events: auto;
+}
+
+.focus-bottom-left-pill {
+  min-width: 380px;
+  max-width: 660px;
+  min-height: 92px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 0 30px;
+  box-shadow: 0 10px 24px rgba(95, 109, 164, 0.08);
+}
+
+.focus-bottom-icon {
+  font-size: 30px;
+  color: #1c2443;
+}
+
+.focus-bottom-title {
+  font-size: 30px;
+  line-height: 1;
+  color: #2d3343;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: "Inter", sans-serif;
+}
+
+.focus-bottom-actions {
+  display: flex;
+  align-items: center;
+}
+
+.focus-nav-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.focus-nav-btn {
+  position: relative;
+  width: 146px;
+  height: 92px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    rgba(223, 234, 255, 0.72) 0%,
+    rgba(196, 213, 249, 0.66) 100%
+  );
+  color: #ffffff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 10px 24px rgba(95, 109, 164, 0.08);
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease;
+}
+
+.focus-nav-btn:hover {
+  transform: translateY(-1px);
+}
+
+.focus-nav-symbol {
+  font-size: 70px;
+  line-height: 1;
+  transform: translateY(-5px);
+  display: block;
+}
+
+.focus-nav-btn.next.active {
+  background: rgba(255, 255, 255, 0.96);
+  color: #0f69c8;
+  box-shadow:
+    inset 0 0 0 2px rgba(214, 217, 223, 0.8),
+    0 10px 24px rgba(95, 109, 164, 0.08);
+}
+
+.focus-nav-btn.prev {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.focus-tooltip {
+  position: absolute;
+  bottom: calc(100% + 18px);
+  width: 266px;
+  min-height: 112px;
+  border-radius: 26px;
+  background: rgba(233, 238, 255, 0.94);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 12px 24px rgba(113, 125, 181, 0.08);
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    visibility 0.25s ease;
+}
+
+.tooltip-left {
+  left: 0;
+}
+
+.tooltip-right {
+  right: 0;
+}
+
+.focus-nav-btn:hover .focus-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.focus-tooltip-small {
+  font-size: 12px;
+  color: rgba(48, 56, 77, 0.42);
+  margin-bottom: 8px;
+}
+
+.focus-tooltip-title {
+  font-size: 24px;
+  color: #2d3343;
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+/* =========================
+   MARKERS
+========================= */
+.diagnostic-marker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 999px;
+  transition:
+    transform 0.28s ease,
+    filter 0.28s ease;
+}
+
+.marker-circle-shell {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+}
+
+.marker-ring {
+  position: absolute;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.ring-outer {
+  width: 32px;
+  height: 32px;
+  border: 1.2px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0 10px rgba(188, 225, 255, 0.08);
+}
+
+.ring-inner {
+  width: 22px;
+  height: 22px;
+  border: 1.2px solid rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 0 10px rgba(120, 190, 255, 0.12),
+    0 0 16px rgba(170, 140, 255, 0.1);
+}
+
+.marker-core {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 3px rgba(132, 205, 255, 0.3),
+    0 0 0 6px rgba(168, 142, 255, 0.14),
+    0 0 14px rgba(143, 214, 255, 0.18);
+}
+
+.marker-ripple {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(95, 178, 255, 0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.diagnostic-marker:hover {
+  transform: scale(1.04);
+  filter: brightness(1.08);
+}
+
+.diagnostic-marker:hover .ring-outer {
+  border-color: rgba(255, 255, 255, 0.86);
+}
+
+.diagnostic-marker:hover .ring-inner {
+  border-color: rgba(255, 255, 255, 1);
+}
+
+.diagnostic-marker:hover .marker-core {
+  box-shadow:
+    0 0 0 4px rgba(132, 205, 255, 0.36),
+    0 0 0 7px rgba(168, 142, 255, 0.18),
+    0 0 18px rgba(143, 214, 255, 0.24);
+}
+
+/* FOCUSED MARKER */
+.diagnostic-marker.is-focused {
+  min-width: 0;
+  height: 40px;
+}
+
+.diagnostic-marker.is-focused .marker-circle-shell {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+}
+
+.diagnostic-marker.is-focused .ring-outer {
+  width: 40px;
+  height: 40px;
+  border-color: rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    0 0 12px rgba(188, 225, 255, 0.14);
+}
+
+.diagnostic-marker.is-focused .ring-inner {
+  width: 28px;
+  height: 28px;
+  border-color: rgba(255, 255, 255, 0.95);
+}
+
+.diagnostic-marker.is-focused .marker-core {
+  width: 8px;
+  height: 8px;
+  box-shadow:
+    0 0 0 3px rgba(132, 205, 255, 0.32),
+    0 0 0 6px rgba(168, 142, 255, 0.16),
+    0 0 14px rgba(143, 214, 255, 0.18);
+}
+
+.focused-marker-pill {
+  position: relative;
+  margin-left: -14px;
+  padding-left: 34px;
+  min-width: 210px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-right: 18px;
+  box-shadow: 0 10px 24px rgba(95, 109, 164, 0.1);
+  transition:
+    min-width 0.28s ease,
+    transform 0.28s ease;
+  font-family: "Inter", sans-serif;
+}
+
+.focused-marker-label {
+  font-size: 14px;
+  color: #2d3343;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.focused-marker-arrow {
+  font-size: 28px;
+  color: #0f69c8;
+  line-height: 1;
+  transform: translateY(-1px);
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+  transition:
+    opacity 0.2s ease,
+    width 0.2s ease;
+}
+
+.diagnostic-marker.is-focused:hover .focused-marker-pill {
+  min-width: 240px;
+}
+
+.diagnostic-marker.is-focused:hover .focused-marker-arrow {
+  opacity: 1;
+  width: 16px;
+}
+
+.diagnostic-marker.is-focused:hover .marker-core {
+  background: #0c7bdb;
+  box-shadow:
+    0 0 0 4px rgba(132, 205, 255, 0.44),
+    0 0 0 8px rgba(168, 142, 255, 0.18),
+    0 0 18px rgba(70, 166, 255, 0.28);
+}
+
+.diagnostic-marker.is-focused:hover .marker-ripple {
+  animation: markerRipple 1.15s ease-out infinite;
+}
+
+@keyframes markerRipple {
+  0% {
+    width: 8px;
+    height: 8px;
+    opacity: 0.8;
+    border-color: rgba(73, 154, 255, 0.42);
+  }
+  100% {
+    width: 28px;
+    height: 28px;
+    opacity: 0;
+    border-color: rgba(73, 154, 255, 0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .focus-bottom-wrap {
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    width: calc(100vw - 28px);
+  }
+
+  .focus-bottom-bar {
+    min-height: 94px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    gap: 10px;
+  }
+
+  .focus-bottom-left-pill {
+    min-width: 0;
+    max-width: none;
+    flex: 1;
+    min-height: 74px;
+    padding: 0 22px;
+    gap: 14px;
+    border-radius: 999px;
+  }
+
+  .focus-bottom-icon {
+    display: none;
+  }
+
+  .focus-bottom-title {
+    font-size: 28px;
+    line-height: 1;
+    width: 100%;
+    text-align: center;
+  }
+
+  .focus-bottom-actions {
+    flex-shrink: 0;
+  }
+
+  .focus-nav-group {
+    gap: 8px;
+  }
+
+  .focus-nav-btn {
+    width: 62px;
+    height: 74px;
+    border-radius: 999px;
+    flex-shrink: 0;
+  }
+
+  .focus-nav-symbol {
+    font-size: 42px;
+    transform: translateY(-2px);
+  }
+
+  .focus-tooltip {
+    display: none;
+  }
+
+  .focus-back-button {
+    top: 36px;
+    left: 22px;
+    width: 42px;
+    height: 42px;
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .focus-bottom-title {
+    font-size: 24px;
+  }
+
+  .focus-bottom-left-pill {
+    padding: 0 18px;
+  }
+
+  .focus-nav-btn {
+    width: 58px;
+    height: 70px;
+  }
 }
