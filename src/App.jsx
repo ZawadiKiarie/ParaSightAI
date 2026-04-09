@@ -11,6 +11,7 @@ import { AnimatePresence } from "motion/react";
 import { ListOverlay } from "./components/ListOverlay";
 import { StageToggle } from "./components/StageToggle";
 import { FocusFeatureOverlay } from "./components/FocusFeatureOverlay";
+import { IsolatedFeatureOverlay } from "./components/IsolatedFeatureOverlay";
 
 function App() {
   const view = useAtomValue(viewAtom);
@@ -38,6 +39,8 @@ function App() {
         )}
 
         {view === "FOCUS" && <FocusFeatureOverlay key="focus-ui" />}
+
+        {view === "ISOLATED" && <IsolatedFeatureOverlay key="isolated-ui" />}
       </AnimatePresence>
     </div>
   );

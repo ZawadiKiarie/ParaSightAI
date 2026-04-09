@@ -5,6 +5,7 @@ import {
   focusedMarkerIdAtom,
   focusedFeatureIndexAtom,
   viewAtom,
+  infoSectionAtom,
 } from "../store/store";
 
 export const DiagnosticMarker = ({
@@ -21,8 +22,23 @@ export const DiagnosticMarker = ({
   const setFocusedMarkerId = useSetAtom(focusedMarkerIdAtom);
   const setFocusedFeatureIndex = useSetAtom(focusedFeatureIndexAtom);
   const setView = useSetAtom(viewAtom);
+  const setInfoSection = useSetAtom(infoSectionAtom);
 
   const isFocused = view === "FOCUS" && focusedMarkerId === markerId;
+
+  const handleClick = () => {
+    if (isFocused) {
+      setInfoSection("overview");
+      setView("ISOLATED");
+      if (onClick) onClick();
+      return;
+    }
+
+    setFocusedMarkerId(markerId);
+    setFocusedFeatureIndex(markerIndex);
+    setView("FOCUS");
+    if (onClick) onClick();
+  };
 
   return (
     <group position={position}>
@@ -39,12 +55,7 @@ export const DiagnosticMarker = ({
           className={`diagnostic-marker ${isFocused ? "is-focused" : ""}`}
           onMouseEnter={() => setHoveredMarker(markerId)}
           onMouseLeave={() => setHoveredMarker(null)}
-          onClick={() => {
-            setFocusedMarkerId(markerId);
-            setFocusedFeatureIndex(markerIndex);
-            setView("FOCUS");
-            if (onClick) onClick();
-          }}
+          onClick={handleClick}
           aria-label={label}
         >
           <span className="marker-circle-shell">

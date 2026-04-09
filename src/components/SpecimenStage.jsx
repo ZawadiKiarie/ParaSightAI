@@ -5,7 +5,6 @@ import {
   stageAtom,
   viewAtom,
   hoveredMarkerAtom,
-  focusedMarkerIdAtom,
   focusedFeatureIndexAtom,
 } from "../store/store";
 import { PARASITE_DATA } from "./ParasiteConfig";
@@ -26,7 +25,6 @@ export const SpecimenStage = () => {
   const outerGroupRef = useRef();
   const modelPivotRef = useRef();
   const focusTargetRef = useRef(new THREE.Vector3(0, 0, 0));
-  const dragOffsetRef = useRef(new THREE.Vector2(0, 0));
 
   const config = PARASITE_DATA[id][stage];
   const markers = config.markers ?? [];
@@ -54,6 +52,8 @@ export const SpecimenStage = () => {
 
     const isHome = view === "HOME";
     const isFocus = view === "FOCUS";
+    const isIsolated = view === "ISOLATED";
+    const isMobile = window.innerWidth <= 1024;
 
     let targetScale = 1.9;
     let targetX = 0;
@@ -64,6 +64,9 @@ export const SpecimenStage = () => {
     } else if (isFocus) {
       targetScale = 2.55;
       targetX = 0;
+    } else if (isIsolated) {
+      targetScale = isMobile ? 2.45 : 2.95;
+      targetX = isMobile ? 0.45 : 2.25;
     }
 
     gsap.killTweensOf(outerGroupRef.current.position);
@@ -73,7 +76,7 @@ export const SpecimenStage = () => {
       x: targetX,
       y: 0,
       z: 0,
-      duration: 1.2,
+      duration: 1.1,
       ease: "power3.inOut",
     });
 
@@ -81,7 +84,7 @@ export const SpecimenStage = () => {
       x: targetScale,
       y: targetScale,
       z: targetScale,
-      duration: 1.2,
+      duration: 1.1,
       ease: "power3.inOut",
     });
 
@@ -90,12 +93,10 @@ export const SpecimenStage = () => {
         x: 0,
         y: 0,
         z: 0,
-        duration: 1,
+        duration: 0.8,
         ease: "power3.inOut",
       });
     }
-
-    dragOffsetRef.current.set(0, 0);
   }, [id, stage, view]);
 
   useEffect(() => {
@@ -166,7 +167,6 @@ export const SpecimenStage = () => {
 
     if (view === "FOCUS" && focusMarker) {
       const [mx, my] = focusMarker.position;
-
       focusTargetRef.current.set(-mx * 1.25, -my * 1.25, 0);
 
       modelPivotRef.current.position.lerp(focusTargetRef.current, ease);
@@ -182,6 +182,9 @@ export const SpecimenStage = () => {
         0,
         ease,
       );
+    } else if (view === "ISOLATED") {
+      focusTargetRef.current.set(0, 0, 0);
+      modelPivotRef.current.position.lerp(focusTargetRef.current, ease);
     } else {
       focusTargetRef.current.set(0, 0, 0);
       modelPivotRef.current.position.lerp(focusTargetRef.current, ease);
@@ -196,11 +199,11 @@ export const SpecimenStage = () => {
     >
       <group ref={outerGroupRef}>
         <group ref={modelPivotRef}>
-          <Center key={`${id}-${stage}`}>
+          <Center key={`${id}-${stage}-${view}`}>
             <group scale={config.scale ?? 1}>
               {config.Component}
 
-              {view !== "HOME" &&
+              {(view === "LIST" || view === "FOCUS") &&
                 config.markers?.map((marker, index) => (
                   <DiagnosticMarker
                     key={marker.id}

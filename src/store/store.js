@@ -3,17 +3,20 @@ import { atom } from "jotai";
 // 'HOME', 'LIST', 'FOCUS', 'ISOLATED'
 export const viewAtom = atom("HOME");
 
-// The currently selected parasite ID
+// Current parasite
 export const parasiteAtom = atom("EntamoebaHystolytica");
 
-// The life stage: 'trophozoite', 'cyst', 'oocyst', etc.
+// Current stage
 export const stageAtom = atom("trophozoite");
 
-// The currently hovered marker id
+// Hovered marker id
 export const hoveredMarkerAtom = atom(null);
 
-// The currently focused marker id
+// Focused marker id
 export const focusedMarkerIdAtom = atom(null);
 
-// The currently focused feature index in the stage
+// Focused feature index
 export const focusedFeatureIndexAtom = atom(0);
+
+// Active section/tab inside isolated info modal
+export const infoSectionAtom = atom("overview");
