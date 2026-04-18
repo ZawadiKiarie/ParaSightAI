@@ -55,17 +55,19 @@ export const SpecimenStage = () => {
     const isIsolated = view === "ISOLATED";
     const isMobile = window.innerWidth <= 1024;
 
-    let targetScale = 1.9;
+    let targetScale = config.listScale ?? 1.9;
     let targetX = 0;
 
     if (isHome) {
       targetScale = 2.0;
       targetX = 1;
     } else if (isFocus) {
-      targetScale = 2.55;
+      targetScale = config.focusScale ?? 2.55;
       targetX = 0;
     } else if (isIsolated) {
-      targetScale = isMobile ? 2.45 : 2.95;
+      targetScale = isMobile
+        ? (config.isolatedScale ?? 2.7) * 0.9
+        : (config.isolatedScale ?? 2.95);
       targetX = isMobile ? 0.45 : 2.25;
     }
 
@@ -97,7 +99,7 @@ export const SpecimenStage = () => {
         ease: "power3.inOut",
       });
     }
-  }, [id, stage, view]);
+  }, [id, stage, view, config]);
 
   useEffect(() => {
     const dom = gl.domElement;
@@ -166,8 +168,14 @@ export const SpecimenStage = () => {
     const ease = 1 - Math.exp(-5 * delta);
 
     if (view === "FOCUS" && focusMarker) {
-      const [mx, my] = focusMarker.position;
-      focusTargetRef.current.set(-mx * 1.25, -my * 1.25, 0);
+      const [mx, my, mz = 0] = focusMarker.position;
+      const [offX, offY, offZ = 0] = config.focusFrameOffset ?? [0, 0, 0];
+
+      focusTargetRef.current.set(
+        -mx * 1.25 + offX,
+        -my * 1.25 + offY,
+        -mz * 0.25 + offZ,
+      );
 
       modelPivotRef.current.position.lerp(focusTargetRef.current, ease);
 
@@ -183,7 +191,9 @@ export const SpecimenStage = () => {
         ease,
       );
     } else if (view === "ISOLATED") {
-      focusTargetRef.current.set(0, 0, 0);
+      const [offX, offY, offZ = 0] = config.isolatedFrameOffset ?? [0, 0, 0];
+
+      focusTargetRef.current.set(offX, offY, offZ);
       modelPivotRef.current.position.lerp(focusTargetRef.current, ease);
     } else {
       focusTargetRef.current.set(0, 0, 0);

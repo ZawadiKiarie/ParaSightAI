@@ -16,6 +16,7 @@ export const PARASITE_DATA = {
   EntamoebaHystolytica: {
     id: "01",
     name: "Entamoeba Histolytica",
+
     trophozoite: {
       Component: <EntHistTrophModel rotation={[0, Math.PI, 0]} />,
       features: [
@@ -52,32 +53,93 @@ export const PARASITE_DATA = {
           position: [0.66, 0.02, 0.21],
         },
       ],
+      listScale: 1.9,
+      focusScale: 2.55,
+      isolatedScale: 2.95,
+      focusFrameOffset: [0, 0.28, 0],
+      isolatedFrameOffset: [0, 0.18, 0],
     },
+
     cyst: {
       Component: <EntHistCystModel />,
       features: [
         "4 Nuclei",
         "Chromatoid bodies",
         "Rounded cyst wall",
-        "centrally-located karyosome",
+        "Centrally located karyosome",
       ],
-      // position: [0, -1, 0],
+      markers: [
+        {
+          id: "nuclei",
+          label: "4 Nuclei",
+          position: [0.12, 1.08, 0.58],
+        },
+        {
+          id: "chromatoid",
+          label: "Chromatoid bodies",
+          position: [-0.42, 1.25, -0.12],
+        },
+        {
+          id: "cystWall",
+          label: "Rounded cyst wall",
+          position: [0.84, 1.02, 0.22],
+        },
+        {
+          id: "karyosome",
+          label: "Centrally located karyosome",
+          position: [0.0, 0.77, 0.56],
+        },
+      ],
+      listScale: 1.9,
+      focusScale: 2.35,
+      isolatedScale: 2.7,
+      focusFrameOffset: [0, 1.05, 0],
+      isolatedFrameOffset: [0, 0.82, 0],
     },
   },
 
   EntamoebaHartmanni: {
     id: "02",
     name: "Entamoeba Hartmanni",
+
     trophozoite: {
-      Component: <HartmanniModel scale={0.5} />,
+      Component: <HartmanniModel />,
+      scale: 0.5,
       features: [
         "One Nucleus",
         "Central Karyosome",
         "Fine Peripheral Chromatin",
         "No Ingested RBCs",
       ],
-      // position: [0, 0, 0],
+      markers: [
+        {
+          id: "nucleus",
+          label: "One Nucleus",
+          position: [0.01, 1.0, 0.22],
+        },
+        {
+          id: "karyosome",
+          label: "Central Karyosome",
+          position: [0.05, 0.99, 0.16],
+        },
+        {
+          id: "chromatin",
+          label: "Fine Peripheral Chromatin",
+          position: [-0.05, 1.0, 0.13],
+        },
+        {
+          id: "noRBCs",
+          label: "No Ingested RBCs",
+          position: [0.24, 1.1, 0.14],
+        },
+      ],
+      listScale: 1.9,
+      focusScale: 2.55,
+      isolatedScale: 2.95,
+      focusFrameOffset: [0, 1.3, 0],
+      isolatedFrameOffset: [0, 0.22, 0],
     },
+
     cyst: {
       Component: <HartmanniCystModel />,
       features: [
@@ -87,7 +149,38 @@ export const PARASITE_DATA = {
         "centrally-located kayrosome",
         "evenly-distributed chromatin",
       ],
-      // position: [0, 0, 0],
+      markers: [
+        {
+          id: "nuclei",
+          label: "4 Nuclei",
+          position: [0.08, 1.08, 0.54],
+        },
+        {
+          id: "chromatoid",
+          label: "Chromatoid Bars",
+          position: [0.18, 0.96, -0.08],
+        },
+        {
+          id: "cystWall",
+          label: "Spherical Shape",
+          position: [0.78, 1.02, 0.18],
+        },
+        {
+          id: "karyosome",
+          label: "Central Karyosome",
+          position: [0.02, 0.82, 0.44],
+        },
+        {
+          id: "chromatin",
+          label: "Evenly Distributed Chromatin",
+          position: [-0.18, 1.2, 0.08],
+        },
+      ],
+      listScale: 1.9,
+      focusScale: 2.28,
+      isolatedScale: 2.6,
+      focusFrameOffset: [0, 1.02, 0],
+      isolatedFrameOffset: [0, 0.82, 0],
     },
   },
 
@@ -103,7 +196,11 @@ export const PARASITE_DATA = {
         "dirty cytoplasm",
         "short and blunt pseudopodia",
       ],
-      // position: [0, 1, 1],
+      listScale: 1.9,
+      focusScale: 2.55,
+      isolatedScale: 2.95,
+      focusFrameOffset: [0, 0.3, 0],
+      isolatedFrameOffset: [0, 0.2, 0],
     },
     cyst: {
       Component: <EColiCystModel scale={1.0} />,
@@ -112,7 +209,11 @@ export const PARASITE_DATA = {
         "Splinter-like Chromatoid bodies",
         "Thick cyst wall",
       ],
-      // position: [0, 0, 0],
+      listScale: 1.9,
+      focusScale: 2.25,
+      isolatedScale: 2.6,
+      focusFrameOffset: [0, 0.9, 0],
+      isolatedFrameOffset: [0, 0.72, 0],
     },
   },
 
@@ -128,13 +229,21 @@ export const PARASITE_DATA = {
         "Ventral adhesive disk",
         "Bilaterial symmetry",
       ],
-      // position: [0, 0, 0],
       scale: 0.5,
+      listScale: 1.9,
+      focusScale: 2.25,
+      isolatedScale: 2.6,
+      focusFrameOffset: [0, 0.18, 0],
+      isolatedFrameOffset: [0, 0.12, 0],
     },
     cyst: {
       Component: <GLCystModel scale={0.5} />,
       features: ["4 Nuclei", "Internal axonemes visible", "Oval cyst Shape"],
-      // position: [0, -1, 0],
+      listScale: 1.9,
+      focusScale: 2.2,
+      isolatedScale: 2.5,
+      focusFrameOffset: [0, 0.75, 0],
+      isolatedFrameOffset: [0, 0.58, 0],
     },
   },
 
@@ -148,12 +257,20 @@ export const PARASITE_DATA = {
         "thin cytoplasmic ring",
         "Peripheral nuclei",
       ],
-      // position: [0, 0, 0],
+      listScale: 1.9,
+      focusScale: 2.2,
+      isolatedScale: 2.5,
+      focusFrameOffset: [0, 0.2, 0],
+      isolatedFrameOffset: [0, 0.12, 0],
     },
     cyst: {
       Component: <BlastoCystisCyst />,
       features: ["Thick cyst wall", "Compact internal structures", "Nuclei"],
-      // position: [0, 0, 0],
+      listScale: 1.9,
+      focusScale: 2.2,
+      isolatedScale: 2.5,
+      focusFrameOffset: [0, 0.75, 0],
+      isolatedFrameOffset: [0, 0.58, 0],
     },
   },
 
@@ -163,7 +280,11 @@ export const PARASITE_DATA = {
     oocyst: {
       Component: <CryptoSporidiumOocyst />,
       features: ["4 sporozoites", "Thick outer wall", "Small spherical oocyst"],
-      // position: [0, 0, 0],
+      listScale: 1.9,
+      focusScale: 2.1,
+      isolatedScale: 2.35,
+      focusFrameOffset: [0, 0.55, 0],
+      isolatedFrameOffset: [0, 0.42, 0],
     },
   },
 
@@ -178,7 +299,11 @@ export const PARASITE_DATA = {
         "2 sporocysts",
         "4 sporozoite per sporocyst",
       ],
-      // position: [0, 0, 0],
+      listScale: 1.9,
+      focusScale: 2.15,
+      isolatedScale: 2.4,
+      focusFrameOffset: [0, 0.65, 0],
+      isolatedFrameOffset: [0, 0.48, 0],
     },
   },
 
@@ -193,7 +318,11 @@ export const PARASITE_DATA = {
         "Granular cytoplasm",
         "Irregular amoeboid shape",
       ],
-      // position: [0, 0, 0],
+      listScale: 1.9,
+      focusScale: 2.35,
+      isolatedScale: 2.7,
+      focusFrameOffset: [0, 0.25, 0],
+      isolatedFrameOffset: [0, 0.18, 0],
     },
   },
 };
